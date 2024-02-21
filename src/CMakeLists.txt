@@ -1,1 +1,1 @@
-add_executable(FastSLAM test.cpp)
+add_subdirectory(TestClass)

@@ -18,10 +18,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # library configs
 find_package (Eigen3 3.4 REQUIRED NO_MODULE)
+
+# testing set up
+option(BUILD_TESTS "Build Tests" OFF)
+if(BUILD_TESTS)
+    find_package(Catch2 3 REQUIRED)
+    include(CTest)
+    include(Catch)
+endif()
+
 # source configuration
 add_subdirectory(src)
-target_include_directories(FastSLAM PUBLIC
-                           "${PROJECT_BINARY_DIR}"
-                           "${PROJECT_SOURCE_DIR}/include"
-                         )
-target_link_libraries(FastSLAM Eigen3::Eigen)
