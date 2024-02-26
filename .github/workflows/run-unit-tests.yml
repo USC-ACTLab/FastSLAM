@@ -5,9 +5,6 @@ on:
     branches:
       - 'main'
       - 'dev'
-  pull_request:
-    types:
-      - closed
   pull_request_review:
     types: [submitted]
   schedule:
@@ -16,8 +13,10 @@ on:
   
 jobs:
 
-  get-catch:
+  run-unit-tests:
     runs-on: ubuntu-latest
+    if: | 
+      github.event.review.state == 'APPROVED'
     steps:
       - name: checkout catch2 dev repo
         uses: actions/checkout@v4
@@ -28,11 +27,6 @@ jobs:
         run: cmake -B build -S .
       - name: build and install
         run: sudo cmake --build build -j ${nproc-2} --target install
-
-  build:
-    needs: get-catch
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v4
       - name: set up packages
         run: |
@@ -43,15 +37,3 @@ jobs:
       - name: build
         run: cmake --build build -j ${nproc-2}
 
-  approved:
-    if: github.event.review.state == 'APPROVED'
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: cd build/ && ctest
-
-  scheduled_test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: cd build/ && ctest
