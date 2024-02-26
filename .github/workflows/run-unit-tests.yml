@@ -13,13 +13,11 @@ on:
   schedule:
     - cron: '0 1 * * 1'
 
-env:
-  RUNNER_VERSION: ubuntu-latest
   
 jobs:
 
   get-catch:
-    runs-on: ${RUNNER_VERSION}
+    runs-on: ubuntu-latest
     steps:
       - name: clone catch2 repo
         run: git clone https://github.com/catchorg/Catch2.git && cd Catch2
@@ -30,7 +28,7 @@ jobs:
 
   build:
     needs: get-catch
-    runs-on: ${RUNNER_VERSION}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: set up packages
@@ -43,12 +41,12 @@ jobs:
   approved:
     if: github.event.review.state == 'APPROVED'
     needs: build
-    runs-on: ${RUNNER_VERSION}
+    runs-on: ubuntu-latest
     steps:
       - run: cd build/ && ctest
 
   scheduled_test:
     needs: build
-    runs-on: ${RUNNER_VERSION}
+    runs-on: ubuntu-latest
     steps:
       - run: cd build/ && ctest
