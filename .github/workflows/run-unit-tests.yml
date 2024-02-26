@@ -1,0 +1,55 @@
+name: Run Catch2 unit tests
+define: $runner_version ubuntu-latest
+
+on:
+  pull_request:
+    types:
+      - closed
+  pull_request_review:
+    types: [submitted]
+  schedule:
+    - cron: '0 1 * * 1'
+
+jobs:
+
+  get-catch:
+    runs-on: *runner_version
+    steps:
+      - name: clone catch2 repo
+        run: git clone https://github.com/catchorg/Catch2.git && cd Catch2
+      - name: configure build
+        run: cmake -B build -S .
+      - name: build
+        run: cmake --build build -j ${nproc-2}
+
+  build:
+    needs: get-catch
+    runs-on: *runner_version
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up packages
+        run: xargs sudo apt -y install < packages.txt
+      - name: configure
+        run: cmake -B build -S . -DBUILD_TESTS=ON
+      - name: build
+        run: cmake --build build -j ${nproc-2}
+
+  approved:
+    if: github.event.review.state == 'APPROVED'
+    needs: build
+    runs-on: *runner_version
+    steps:
+      - run: cd build/ && ctest
+
+  pr-merged:
+    if: github.event.pull_request.merged == true
+    needs: build
+    runs-on: *runner_version
+    steps:
+      - run: cd build/ && ctest
+
+  scheduled_test:
+    needs: build
+    runs-on: *runner_version
+    steps:
+      - run: cd build/ && ctest
