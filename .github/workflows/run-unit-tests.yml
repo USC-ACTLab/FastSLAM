@@ -19,18 +19,20 @@ jobs:
   get-catch:
     runs-on: ubuntu-latest
     steps:
-      - name: clone catch2 repo
-        run: git clone https://github.com/catchorg/Catch2.git && cd Catch2
+      - name: checkout catch2 dev repo
+        uses: actions/checkout@v4
+        with:
+          repository: catch-org/Catch2
       - name: configure build
         run: cmake -B build -S .
-      - name: build
-        run: cmake --build build -j ${nproc-2}
+      - name: build and install
+        run: cmake --build build -j ${nproc-2} --target install
 
   build:
     needs: get-catch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: set up packages
         run: xargs sudo apt -y install < packages.txt
       - name: configure
