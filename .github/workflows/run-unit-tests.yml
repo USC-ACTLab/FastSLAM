@@ -16,7 +16,9 @@ jobs:
   run-unit-tests:
     runs-on: ubuntu-latest
     if: | 
-      github.event.review.state == 'APPROVED'
+      github.event.review.state == 'APPROVED' ||
+      github.event_name == 'push' ||
+      github.event_name == 'schedule'
     steps:
       - name: checkout catch2 dev repo
         uses: actions/checkout@v4
