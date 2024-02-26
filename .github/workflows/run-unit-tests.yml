@@ -1,6 +1,10 @@
 name: 'Run Catch2 unit tests'
 
 on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
   pull_request:
     types:
       - closed
@@ -15,7 +19,7 @@ env:
 jobs:
 
   get-catch:
-    runs-on: $RUNNER_VERSION
+    runs-on: ${RUNNER_VERSION}
     steps:
       - name: clone catch2 repo
         run: git clone https://github.com/catchorg/Catch2.git && cd Catch2
@@ -26,7 +30,7 @@ jobs:
 
   build:
     needs: get-catch
-    runs-on: $RUNNER_VERSION
+    runs-on: ${RUNNER_VERSION}
     steps:
       - uses: actions/checkout@v3
       - name: set up packages
@@ -39,19 +43,12 @@ jobs:
   approved:
     if: github.event.review.state == 'APPROVED'
     needs: build
-    runs-on: $RUNNER_VERSION
-    steps:
-      - run: cd build/ && ctest
-
-  pr-merged:
-    if: github.event.pull_request.merged == true
-    needs: build
-    runs-on: $RUNNER_VERSION
+    runs-on: ${RUNNER_VERSION}
     steps:
       - run: cd build/ && ctest
 
   scheduled_test:
     needs: build
-    runs-on: $RUNNER_VERSION
+    runs-on: ${RUNNER_VERSION}
     steps:
       - run: cd build/ && ctest
