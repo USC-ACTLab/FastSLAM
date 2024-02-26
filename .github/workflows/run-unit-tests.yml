@@ -38,4 +38,8 @@ jobs:
         run: cmake -B build -S . -DBUILD_TESTS=ON
       - name: build
         run: cmake --build build -j ${nproc-2}
+      - name: test
+        run: |
+          cd build
+          ctest
 
