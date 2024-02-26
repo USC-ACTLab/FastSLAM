@@ -23,6 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: catch-org/Catch2
+          ref: 'v3.5.2'
       - name: configure build
         run: cmake -B build -S .
       - name: build and install
