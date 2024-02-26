@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: set up packages
-        run: xargs sudo apt -y install < packages.txt
+        run: xargs sudo apt -y install < ./package_list.txt
       - name: configure
         run: cmake -B build -S . -DBUILD_TESTS=ON
       - name: build
