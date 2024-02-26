@@ -27,7 +27,7 @@ jobs:
       - name: configure build
         run: cmake -B build -S .
       - name: build and install
-        run: cmake --build build -j ${nproc-2} --target install
+        run: sudo cmake --build build -j ${nproc-2} --target install
 
   build:
     needs: get-catch
