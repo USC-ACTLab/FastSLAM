@@ -1,2 +1,6 @@
 # FastSLAM
-Implementation of FastSLAM 1.0 as presented by Montemerlo et al. (2002)
+Implementation of FastSLAM 1.0 as presented by Montemerlo et al. (2002).
+
+## References
+> FastSLAM: A Factored Solution to the Simultaneous Localization and Mapping Problem \
+> Michael Montemerlo, Sebastian Thrun, Daphne Koller and Ben Wegbreit (AAAI 2002)
