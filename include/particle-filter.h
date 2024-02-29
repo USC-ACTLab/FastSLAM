@@ -7,37 +7,42 @@
 #pragma once
 
 #include <vector>
+#include "core-structs.h"
+#include "gaussian-2D.h"
 
 /**
- * @brief Represents the SLAM posterior as a set of particles.
- * 
- * @tparam  MotionCommand_T   Generic type for a motion command
- * @tparam  Observation_T     Generic type for an observation
- * @tparam  Particle_T        Generic type for a particle
+ * @brief Implements a particle filter for 2D planar robot motion.
  */
-template <class MotionCommand_T, class Observation_T, class Particle_T>
 class ParticleFilter {
 
-   public:
+public:
 
-      /**
-       * @brief Constructor for the ParticleFilter class.
-       * 
-       * @param[in]     aNumParticles     Initial number of particles created
-       */
-      ParticleFilter( const int aNumParticles );
+   /**
+    * @brief A particle represents a single hypothesis of the true posterior.
+    */
+   struct Particle2D {
+      Pose2D robotState;                  // Robot pose estimate
+      std::vector<Gaussian2D> landmarks;  // Posteriors over landmark locations
+   };
 
-      /**
-       * @brief Updates the posterior given a new timestep of sensor information.
-       * 
-       * @param[in]     aCommand       Motion command preceding current state
-       * @param[in]     aObservation   Observation from current state
-       */
-      void updatePosterior( const MotionCommand_T& aCommand,
-                            const Observation_T& aObservation );
+   /**
+    * @brief Constructor for the ParticleFilter class.
+    *
+    * @param[in]     aNumParticles     Initial number of particles created
+    */
+   ParticleFilter( const int aNumParticles );
 
-   private:
+   /**
+    * @brief Updates the posterior given new sensor information.
+    *
+    * @param[in]     aCommand       Motion command preceding current state
+    * @param[in]     aObservation   Observation from current state
+    */
+   void updatePosterior( const VelocityCommand2D& aCommand,
+                         const Observation2D& aObservation );
 
-      /** Vector of particles, each an independent "guess" of the posterior. */
-      std::vector<Particle_T> _mParticles;
+private:
+
+   /** Vector of particles providing a distribution over possible posteriors. */
+   std::vector<Particle2D> _mParticles;
 };

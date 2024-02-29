@@ -8,3 +8,6 @@ compile_commands.json
 .cache
 docs/
 Testing/
+
+# Ignore Uncrustify configuration (address in future branch)
+uncrustify.cfg
