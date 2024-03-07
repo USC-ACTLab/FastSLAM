@@ -3,6 +3,10 @@
  * @brief Implements common probability distributions and their samplers.
  */
 
+#pragma once
+
+#include <vector>
+
 /**
  * @brief Namespace for common probability utility functions.
  */
@@ -37,6 +41,24 @@ double sampleNormal(const double aMean, const double aVariance);
  *
  * @returns Approximate probability of the observed sample from the Gaussian
  */
-double probabilityGaussian( const double aValue, const double aVariance );
+double calcGaussianProbability( const double aValue, const double aVariance );
 
-};
+/**
+ * @brief Samples a vector (with replacement) using a low-variance strategy.
+ *
+ * @details New samples are included with probability proportional to their
+ *    weight, with repeats allowed. This sampler is efficient: O(particles).
+ *
+ *    Reference: Probabilistic Robotics, Ch. 4.3, Table 4.4 (pg. 110)
+ *
+ * @tparam     Particle_T           Type of the particle being re-sampled
+ *
+ * @param[in]  aWeightedParticles   Vector of generic [particle, weight] pairs
+ *
+ * @returns Newly sampled vector with probabilities based on given weights
+ */
+template<typename Particle_T>
+std::vector<Particle_T> resampleLowVariance(
+   const std::vector< std::pair<Particle_T, double> >& aWeightedParticles );
+
+}; // namespace Probability

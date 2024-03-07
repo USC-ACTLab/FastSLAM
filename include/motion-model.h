@@ -16,7 +16,8 @@ public:
 
    /**
     * @brief Constructor for the MotionModel class.
-    *    TODO: Is anything actually needed here? The alpha terms, I think.
+    *    TODO: Is anything actually needed here? The alpha noise terms!
+    *    TODO: Design: Who owns the timestep? Should it vary per-update?
     */
    MotionModel( void );
 
@@ -24,6 +25,7 @@ public:
     * @brief Simulates robot motion using a motion command (without noise).
     *
     * @details This implementation is in-place: it updates the given state!
+    *    Reference: Probabilistic Robotics, Ch. 5.3, Eq. 5.9 (pg. 127)
     *
     * @param[in/out]    aState         Robot state from which motion begins
     * @param[in]        aCommand       Motion command defining the motion

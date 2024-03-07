@@ -18,14 +18,6 @@ class ParticleFilter {
 public:
 
    /**
-    * @brief A particle represents a single hypothesis of the true posterior.
-    */
-   struct Particle2D {
-      Pose2D robotState;                  // Robot pose estimate
-      std::vector<Gaussian2D> landmarks;  // Posteriors over landmark locations
-   };
-
-   /**
     * @brief Constructor for the ParticleFilter class.
     *
     * @param[in]     aNumParticles     Initial number of particles created

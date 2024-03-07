@@ -27,6 +27,8 @@ public:
     * @details Formally, computes the likelihood p(z_t^i | s_t^[m], theta_k).
     *    Reference: Probabilistic Robotics, Ch. 6.6, Table 6.4 (pg. 179)
     *
+    *    TODO: We *may* want to use Mahalanobis distance. Let's discuss.
+    *
     * @param[in]  robotPose      Pose of the robot when the observation was made
     * @param[in]  measurement    Sensor measurement of the observed landmark
     * @param[in]  landmark       Nominal location of the landmark

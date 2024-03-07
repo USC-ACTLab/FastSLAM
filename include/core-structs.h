@@ -36,6 +36,9 @@ struct Observation2D {
    /**
     * @brief Stores the landmark signature corresponding to the observation.
     *    Set to std::nullopt to represent an unknown correspondence variable.
+    *
+    * TODO: When DA is unknown, each particle's correspondence may differ.
+    *    Populating/clearing this field may be more trouble than it's worth...
     */
    std::optional<int> landmarkID;
 };
