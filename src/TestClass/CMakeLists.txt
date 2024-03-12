@@ -1,10 +1,10 @@
-add_executable(FastSLAM test.cpp)
+add_executable(TestMe test.cpp)
 
-target_include_directories(FastSLAM PUBLIC
+target_include_directories(TestMe PUBLIC
                            "${PROJECT_BINARY_DIR}"
                            "${PROJECT_SOURCE_DIR}/include"
                          )
-target_link_libraries(FastSLAM Eigen3::Eigen)
+target_link_libraries(TestMe Eigen3::Eigen)
 
 if(BUILD_TESTS)
   add_executable(test_TestClass TestClass_test.cpp)
