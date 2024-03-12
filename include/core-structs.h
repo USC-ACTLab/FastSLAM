@@ -21,7 +21,7 @@ struct Pose2D {
 };
 
 /**
- * @brief A motion command for a 2D planar robot specified as egocentric velocity.
+ * @brief Specifies motion for a 2D planar robot as robot-frame velocities.
  */
 struct VelocityCommand2D {
    float vx_mps;      // Robot-frame "forward" linear velocity (meters per second)
