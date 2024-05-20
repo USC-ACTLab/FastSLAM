@@ -75,32 +75,41 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;Eigen/Core&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="test_8h.html#a90bddeba9cc68793b3e853f85e1dfa91">   13</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="test_8h.html#a90bddeba9cc68793b3e853f85e1dfa91">test_func</a>() {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;Test func&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;}</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="test_8h.html#aeababeb3d077edcbfa00bd2311546a76">   20</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="test_8h.html#aeababeb3d077edcbfa00bd2311546a76">test_eigen</a>() {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    Eigen::Vector2d test_vec(2.0, 2.0);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;Test eigen lib\n&quot;</span> &lt;&lt; test_vec &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classTestClass.html">   25</a></span>&#160;<span class="keyword">class </span><a class="code" href="classTestClass.html">TestClass</a> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">   30</a></span>&#160;        <a class="code" href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">TestClass</a>();</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classTestClass.html">TestClass</a>();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classTestClass.html#ad92a44b9b2adf96823a7e26eded0f3aa">   37</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classTestClass.html#ad92a44b9b2adf96823a7e26eded0f3aa">test_int</a>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classTestClass.html#a5074f88af803d7fbeb9dfb1f04b15e12">   42</a></span>&#160;        Eigen::Matrix2d <a class="code" href="classTestClass.html#a5074f88af803d7fbeb9dfb1f04b15e12">test_mat</a>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="ttc" id="aclassTestClass_html"><div class="ttname"><a href="classTestClass.html">TestClass</a></div><div class="ttdef"><b>Definition:</b> test.h:25</div></div>
-<div class="ttc" id="aclassTestClass_html_a09903432ed60c7c38f1beccc4cf18987"><div class="ttname"><a href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">TestClass::TestClass</a></div><div class="ttdeci">TestClass()</div><div class="ttdoc">test class constructor</div></div>
-<div class="ttc" id="aclassTestClass_html_a5074f88af803d7fbeb9dfb1f04b15e12"><div class="ttname"><a href="classTestClass.html#a5074f88af803d7fbeb9dfb1f04b15e12">TestClass::test_mat</a></div><div class="ttdeci">Eigen::Matrix2d test_mat</div><div class="ttdoc">test class private vector member</div><div class="ttdef"><b>Definition:</b> test.h:42</div></div>
-<div class="ttc" id="aclassTestClass_html_ad92a44b9b2adf96823a7e26eded0f3aa"><div class="ttname"><a href="classTestClass.html#ad92a44b9b2adf96823a7e26eded0f3aa">TestClass::test_int</a></div><div class="ttdeci">int test_int</div><div class="ttdoc">test class private integer member</div><div class="ttdef"><b>Definition:</b> test.h:37</div></div>
-<div class="ttc" id="atest_8h_html_a90bddeba9cc68793b3e853f85e1dfa91"><div class="ttname"><a href="test_8h.html#a90bddeba9cc68793b3e853f85e1dfa91">test_func</a></div><div class="ttdeci">void test_func()</div><div class="ttdoc">test function that prints a msg</div><div class="ttdef"><b>Definition:</b> test.h:13</div></div>
-<div class="ttc" id="atest_8h_html_aeababeb3d077edcbfa00bd2311546a76"><div class="ttname"><a href="test_8h.html#aeababeb3d077edcbfa00bd2311546a76">test_eigen</a></div><div class="ttdeci">void test_eigen()</div><div class="ttdoc">test function that invokes the eigen3 lib</div><div class="ttdef"><b>Definition:</b> test.h:20</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="test_8h.html#a5d474ab7da4c0ebd0b880fe584a8f2c5">   14</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="test_8h.html#a5d474ab7da4c0ebd0b880fe584a8f2c5">test_func</a>() {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;Test func&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="test_8h.html#a74101a7d37fa79beca8544227f1ab779">   23</a></span>&#160;Eigen::Vector2d <a class="code" href="test_8h.html#a74101a7d37fa79beca8544227f1ab779">test_eigen</a>() {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    Eigen::Vector2d test_vec(2.0, 2.0);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;Test eigen lib\n&quot;</span> &lt;&lt; test_vec &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordflow">return</span> test_vec;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classTestClass.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classTestClass.html">TestClass</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">   34</a></span>&#160;        <a class="code" href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">TestClass</a>() : <a class="code" href="classTestClass.html#a06d59ea3c4923b43c5633e44f77e71a1">_test_int</a>(0), <a class="code" href="classTestClass.html#a634328b44f70c2f95cd097ad12bd795f">_public_test_int</a>(1) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <a class="code" href="classTestClass.html#aebf2ee9a66210bec10ad24d4b1acdfb1">_test_mat</a> &lt;&lt; 1, 1, 1, 1;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        };</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classTestClass.html#ab90417bd5b6eff904533b07d7e82bb3a">   42</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classTestClass.html#ab90417bd5b6eff904533b07d7e82bb3a">return_one</a>() {<span class="keywordflow">return</span> 1;};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classTestClass.html#a634328b44f70c2f95cd097ad12bd795f">   47</a></span>&#160;         <span class="keywordtype">int</span> <a class="code" href="classTestClass.html#a634328b44f70c2f95cd097ad12bd795f">_public_test_int</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classTestClass.html#a06d59ea3c4923b43c5633e44f77e71a1">   54</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classTestClass.html#a06d59ea3c4923b43c5633e44f77e71a1">_test_int</a>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classTestClass.html#aebf2ee9a66210bec10ad24d4b1acdfb1">   58</a></span>&#160;        Eigen::Matrix2d <a class="code" href="classTestClass.html#aebf2ee9a66210bec10ad24d4b1acdfb1">_test_mat</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div>
+<div class="ttc" id="aclassTestClass_html"><div class="ttname"><a href="classTestClass.html">TestClass</a></div><div class="ttdef"><b>Definition:</b> test.h:29</div></div>
+<div class="ttc" id="aclassTestClass_html_a06d59ea3c4923b43c5633e44f77e71a1"><div class="ttname"><a href="classTestClass.html#a06d59ea3c4923b43c5633e44f77e71a1">TestClass::_test_int</a></div><div class="ttdeci">int _test_int</div><div class="ttdoc">test class private integer member</div><div class="ttdef"><b>Definition:</b> test.h:54</div></div>
+<div class="ttc" id="aclassTestClass_html_a09903432ed60c7c38f1beccc4cf18987"><div class="ttname"><a href="classTestClass.html#a09903432ed60c7c38f1beccc4cf18987">TestClass::TestClass</a></div><div class="ttdeci">TestClass()</div><div class="ttdoc">test class constructor</div><div class="ttdef"><b>Definition:</b> test.h:34</div></div>
+<div class="ttc" id="aclassTestClass_html_a634328b44f70c2f95cd097ad12bd795f"><div class="ttname"><a href="classTestClass.html#a634328b44f70c2f95cd097ad12bd795f">TestClass::_public_test_int</a></div><div class="ttdeci">int _public_test_int</div><div class="ttdoc">test class public integer member</div><div class="ttdef"><b>Definition:</b> test.h:42</div></div>
+<div class="ttc" id="aclassTestClass_html_ab90417bd5b6eff904533b07d7e82bb3a"><div class="ttname"><a href="classTestClass.html#ab90417bd5b6eff904533b07d7e82bb3a">TestClass::return_one</a></div><div class="ttdeci">int return_one()</div><div class="ttdoc">Test function for unit testing.</div><div class="ttdef"><b>Definition:</b> test.h:42</div></div>
+<div class="ttc" id="aclassTestClass_html_aebf2ee9a66210bec10ad24d4b1acdfb1"><div class="ttname"><a href="classTestClass.html#aebf2ee9a66210bec10ad24d4b1acdfb1">TestClass::_test_mat</a></div><div class="ttdeci">Eigen::Matrix2d _test_mat</div><div class="ttdoc">test class private vector member</div><div class="ttdef"><b>Definition:</b> test.h:58</div></div>
+<div class="ttc" id="atest_8h_html_a5d474ab7da4c0ebd0b880fe584a8f2c5"><div class="ttname"><a href="test_8h.html#a5d474ab7da4c0ebd0b880fe584a8f2c5">test_func</a></div><div class="ttdeci">int test_func()</div><div class="ttdoc">test function that prints a msg</div><div class="ttdef"><b>Definition:</b> test.h:14</div></div>
+<div class="ttc" id="atest_8h_html_a74101a7d37fa79beca8544227f1ab779"><div class="ttname"><a href="test_8h.html#a74101a7d37fa79beca8544227f1ab779">test_eigen</a></div><div class="ttdeci">Eigen::Vector2d test_eigen()</div><div class="ttdoc">test function that invokes the eigen3 lib</div><div class="ttdef"><b>Definition:</b> test.h:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
