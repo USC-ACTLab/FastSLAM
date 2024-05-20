@@ -1,0 +1,45 @@
+name: 'Run Catch2 unit tests'
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+  pull_request_review:
+    types: [submitted]
+  schedule:
+    - cron: '0 1 * * 1'
+
+  
+jobs:
+
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    if: | 
+      github.event.review.state == 'APPROVED' ||
+      github.event_name == 'push' ||
+      github.event_name == 'schedule'
+    steps:
+      - name: checkout catch2 dev repo
+        uses: actions/checkout@v4
+        with:
+          repository: catchorg/Catch2
+          ref: 'v3.5.2'
+      - name: configure build
+        run: cmake -B build -S .
+      - name: build and install
+        run: sudo cmake --build build -j ${nproc-2} --target install
+      - uses: actions/checkout@v4
+      - name: set up packages
+        run: |
+          sudo apt update
+          xargs sudo apt -y install < ./package_list.txt
+      - name: configure
+        run: cmake -B build -S . -DBUILD_TESTS=ON
+      - name: build
+        run: cmake --build build -j ${nproc-2}
+      - name: test
+        run: |
+          cd build
+          ctest
+
