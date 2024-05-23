@@ -5,6 +5,8 @@ on:
     branches:
       - 'main'
       - 'dev'
+  pull_request:
+    types: [opened]
   pull_request_review:
     types: [submitted]
   schedule:
@@ -18,7 +20,8 @@ jobs:
     if: | 
       github.event.review.state == 'APPROVED' ||
       github.event_name == 'push' ||
-      github.event_name == 'schedule'
+      github.event_name == 'schedule' ||
+      github.event_name == 'pull_request'
     steps:
       - name: checkout catch2 dev repo
         uses: actions/checkout@v4
