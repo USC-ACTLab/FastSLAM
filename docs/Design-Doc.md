@@ -63,10 +63,10 @@ This component can be treated as a translation layer between the algorithm and s
 Public methods include:
 - `sampleIMU`: query and gather IMU data, usually for process input to the motion model
 - `sampleSensor`: sample a specific sensor
-- `uampleLandMark`: query and gather landmark from sensors, returning landmark position and id for data association
-- `uampleControl`: return the current control signal applied to the robot
-- `uotionUpdate`: provide an update on robot trajectory given last pose. Note this function is probabilistic, and the result is a sample from the motion model distribution
-- `uredictMeas`: predicts the measurement based on sensor's measurement model and robot trajectory
+- `sampleLandMark`: query and gather landmark from sensors, returning landmark position and id for data association
+- `sampleControl`: return the current control signal applied to the robot
+- `motionUpdate`: provide an update on robot trajectory given last pose. Note this function is probabilistic, and the result is a sample from the motion model distribution
+- `predictMeas`: predicts the measurement based on sensor's measurement model and robot trajectory
 
 Note that `RobotManager` is only responsible for querying robot measurements. It is not responsible for controlling the robot. This approach follows the separation principle of control theory and allows us to use an optimal deterministic controller for the system.
 
