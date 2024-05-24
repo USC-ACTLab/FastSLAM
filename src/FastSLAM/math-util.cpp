@@ -31,7 +31,7 @@ std::pair<float, float> MathUtil::bodyToWorld2D( const std::pair<float,
 
 float MathUtil::sampleNormal( const float aMean, const float aVariance ){
 
-   if (aVariance < 0.0) return 0.0;
+   if (aVariance < 0.0) return std::numeric_limits<double>::quiet_NaN();
 
    std::random_device rd{};
    std::mt19937 gen{rd()};
