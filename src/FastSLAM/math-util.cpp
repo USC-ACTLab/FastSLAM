@@ -21,11 +21,11 @@ std::pair<float, float> MathUtil::bodyToWorld2D( const std::pair<float,
                                                                  float>& aBody_quant,
                                                  const float aTheta_rad ){
 
-   float x_body = cosf(aTheta_rad) * aBody_quant.first - sinf(aTheta_rad) *
-                  aBody_quant.second;
-   float y_body = sinf(aTheta_rad) * aBody_quant.first + cosf(aTheta_rad) *
-                  aBody_quant.second;
-   return std::make_pair(x_body, y_body);
+   float x_world = cosf(aTheta_rad) * aBody_quant.first - sinf(aTheta_rad) *
+                   aBody_quant.second;
+   float y_world = sinf(aTheta_rad) * aBody_quant.first + cosf(aTheta_rad) *
+                   aBody_quant.second;
+   return std::make_pair(x_world, y_world);
 
 }
 

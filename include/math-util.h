@@ -15,7 +15,7 @@
 /**
  * @brief Namespace for common math utility functions.
  */
-namespace MathUtil{
+namespace MathUtil {
 
 
 /**
@@ -23,13 +23,13 @@ namespace MathUtil{
  * @details Multiplies the 2d vector with rotational matrix given the heading in radians.
  * World Frame Coordinate: front x, right y, clockwise rotation from x to y as positive
  *
- * @param[in]    aWorld_pose   2D quantity in world frame
+ * @param[in]    aWorld_quant  2D quantity in world frame
  * @param[in]    aTheta_rad    Robot heading angle in randians
  *
  * @returns quantity in robot frame
  */
-std::pair<float, float> worldToBody2D( const std::pair<float, float>& aWorld_quant, const float aTheta_rad);
-
+std::pair<float, float> worldToBody2D( const std::pair<float, float>& aWorld_quant,
+                                       const float aTheta_rad);
 
 /**
  * @brief Transforms a 2d quantity from robot frame to world frame
@@ -41,7 +41,8 @@ std::pair<float, float> worldToBody2D( const std::pair<float, float>& aWorld_qua
  *
  * @returns quantity in world frame
  */
-std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant, const float aTheta_rad);
+std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant,
+                                      const float aTheta_rad);
 
 /**
  * @brief Generates a random sample from the Gaussian: N(mean, variance).
