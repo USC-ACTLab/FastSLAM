@@ -1,5 +1,5 @@
 /**
- * @file probability.h
+ * @file math-util.h
  * @brief Defines common probability distributions and their samplers.
  */
 
