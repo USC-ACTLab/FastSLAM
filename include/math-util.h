@@ -9,6 +9,7 @@
 #include <utility>
 #include <random>
 #include <cmath>
+#include <limits.h>
 #include "core-structs.h"
 
 /**

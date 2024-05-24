@@ -4,7 +4,7 @@
 #include <math.h>
 
 TEST_CASE("Test Gaussian Sampling - negative variance") {
-   REQUIRE(MathUtil::sampleNormal(1.0f, -1.0f) == 0.0);
+   REQUIRE(isnan(MathUtil::sampleNormal(1.0f, -1.0f)));
 }
 
 TEST_CASE("Test Gaussian Sampling - zero variance") {
