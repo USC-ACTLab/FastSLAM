@@ -63,5 +63,4 @@ public:
     struct Observation2D predictMeas() override;
     Eigen::Matrix2f measJacobian(const struct Point2D mu_prev) const override;
     Eigen::Matrix2f getMeasNoise() const override;
-
 };
