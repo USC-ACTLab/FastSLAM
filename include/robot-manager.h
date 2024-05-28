@@ -9,7 +9,7 @@
 
 class RobotManager {
 public:
-    virtual float sampleIMU() = 0;
-    virtual struct Observation2D sampleLandMark() = 0;
-    virtual struct VelocityCommand2D sampleControl() = 0;
+    virtual void sampleIMU() = 0;
+    virtual void sampleLandMark() = 0;
+    virtual void sampleControl() = 0;
 };
