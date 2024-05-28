@@ -1,7 +1,7 @@
 /**
  * @file EKF.h
  * @brief Defines the EKF class
-*/
+ */
 
 #pragma once
 
@@ -9,69 +9,137 @@
 #include "math-util.h"
 #include "robot-manager.h"
 #include "Eigen/Dense"
-#include <memory.h>
+#include <memory>
+
+enum class KF_RET { SUCCESS = 0, EMPTY_ROBOT_MANAGER = -1, MATRIX_INVERSION_ERROR = -2 };
 
 /**
  * @brief: Abstract EKF class that offers two core EKF functions
-*/
+ */
 class EKFBase {
 
 public:
 
-    /**
-     * @brief updates internal state and covariance based on motion model
-     * @details this function calculates the internal beliefs of the state and covariance
-     */
-    virtual void predict() = 0;
+   /**
+    * @brief updates internal state and covariance based on motion model
+    * @details this function calculates the internal beliefs of the state and covariance
+    */
+   virtual KF_RET predict() = 0;
 
-    /**
-     * @brief corrects internal state and covariane based on measurement
-     */
-    virtual void update() = 0;
+   /**
+    * @brief corrects internal state and covariane based on measurement
+    * @details this function updates both the mean and the covariance based on the filter gain
+    */
+   virtual KF_RET update() = 0;
 
 };
 
-class LandMarkEKF: public EKFBase {
+class LandMarkEKF : public EKFBase {
+
+protected:
 
 public:
 
-    /**
-     * @brief calculate measurement's likelihood of correspondence to the landmark
-     * @details this function utilizes Maximum Likelihood Estimation (MLE) and is
-     * used to solve the data association problem
-     */
-    virtual float calcCPD() = 0;
+   /**
+    * @brief calculate measurement's likelihood of correspondence to the landmark
+    * @details this function utilizes Maximum Likelihood Estimation (MLE) and is
+    * used to solve the data association problem
+    */
+   virtual float calcCPD() = 0;
+
+   /**
+    * @brief virtual desturctor, necessary for accessing derived class through base class pointer
+    */
+   virtual ~LandMarkEKF() { };
 
 };
 
-class LMEKF2D: public LandMarkEKF{
+class LMEKF2D final: public LandMarkEKF {
 
 private:
 
-    Eigen::Matrix2f m_mu;
+   /**
+    * @brief 2D landmark coordinate estimate
+    */
+   struct Point2D m_mu;
 
-    Eigen::Matrix2f m_sigma;
+   /**
+    * @brief landmark estimate covariance matrix
+    */
+   Eigen::Matrix2f m_sigma;
 
-    std::shared_ptr<RobotManager> m_robot;
+   /**
+    * @brief shared pointer to the robot manager instance, used to access measurement models
+    */
+   std::shared_ptr<RobotManager2D> m_robot;
 
-    Eigen::Matrix2f predictJacobian() const;
+   /**
+    * @brief measurement covariance matrix, used for correspondence weight and K-gain calculation
+    */
+   Eigen::Matrix2f m_meas_cov;
 
-    Eigen::Matrix2f measJacobian() const;
+   /**
+    * @brief measurement jacobian helper function, takes the Jacobian of g(s, mu)
+    */
+   Eigen::Matrix2f measJacobian() const;
 
-    float calcKalmanGain() const;
+   /**
+    * @brief function to calculate Kalman Filter gain for measurement correction
+    *
+    * @return A 2x2 matrix of Kalman Filter gain
+    */
+   Eigen::Matrix2f calcKalmanGain() const;
 
+   /**
+    * @brief calculate measurement covariance, store result in member variable
+    */
+   void calcMeasCov();
 
 public:
 
-    LMEKF2D();
+   /**
+    * @brief default constructor, initialize mu and sigma to 0, robot to nullptr
+    */
+   LMEKF2D();
 
-    ~LMEKF2D();
+   /**
+    * @brief parametrized constructor
+    *
+    * @param[in] init_obs: landmark starting location (initial observation)
+    * @param[in] init_cov: P_0, aka initial covariance/uncertainty
+    * @param[in] robot_ptr: shared pointer to the robot manager instance
+    */
+   LMEKF2D(struct Point2D init_obs, Eigen::Matrix2f init_cov,
+           std::shared_ptr<RobotManager2D> robot_ptr);
 
-    void predict() override;
+   /**
+    * @brief default destructor
+    */
+   ~LMEKF2D();
 
-    void update() override;
+   /**
+    * @brief advances internal beliefs of 2D Landmark using the prediction model
+    * @details no-op in Landmark EKF, since target is non dynamic
+    */
+   KF_RET predict() override {
+      return KF_RET::SUCCESS;
+   }
 
-    float calcCPD() override;
+   /**
+    * @brief collects new measurement and update internal beliefs based on measurement
+    */
+   KF_RET update() override;
+
+   /**
+    * @brief calculates likelihood of correspondence given the measurement and prediction
+    * @return float; scalar value measuring likelihood that the observation matches internal state
+    */
+   float calcCPD() override;
+
+   /**
+    * @brief returns current landmark position estimate in world frame
+    * @return a 2D point struct with landmark x and y position
+    * */
+   struct Point2D getLMEst() const;
 
 };
-// candidate functions:

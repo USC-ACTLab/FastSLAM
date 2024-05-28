@@ -3,6 +3,30 @@
 #include "math-util.h"
 #include <math.h>
 
+TEST_CASE("Test overloaded 2D point addition operator") {
+   struct Point2D init = {.x = 1.2f, .y = -0.5f};
+   Eigen::Vector2f corrector(0.5f, 1.5f);
+
+   struct Point2D res = { .x = 1.7f, .y = 1.0f };
+   init += corrector;
+   REQUIRE_THAT( init.x, Catch::Matchers::WithinRel(res.x, 0.001f) ||
+                            Catch::Matchers::WithinAbs(res.x, 0.00001f) );
+   REQUIRE_THAT( init.y, Catch::Matchers::WithinRel(res.y, 0.001f) ||
+                            Catch::Matchers::WithinAbs(res.y, 0.00001f) );
+
+}
+
+TEST_CASE("Test overloaded observation diff operator") {
+
+   struct Observation2D one = { .range_m = 0, .bearing_rad = M_PI/2 };
+   struct Observation2D two = { .range_m = 1, .bearing_rad = 0 };
+   Eigen::Vector2f res(-1, M_PI/2);
+
+   REQUIRE(one - two == res);
+   REQUIRE(two - one == -res);
+
+}
+
 TEST_CASE("Test Gaussian Sampling - negative variance") {
    REQUIRE( isnan( MathUtil::sampleNormal(1.0f, -1.0f) ) );
 }
