@@ -47,6 +47,7 @@ TEST_CASE("Non-empty EKF") {
     std::shared_ptr<RobotManager2D> robot_instance = std::make_shared<Create3Manager>(init_pose, init_cmd, init_cov);
 
     LMEKF2D* filled_landmark_ekf = new LMEKF2D(init_obs, init_cov, robot_instance);
+    REQUIRE(robot_instance.use_count() == 2); // check correct ownership changes
 
     SECTION("Test: prediction does not change state") {
         struct Point2D expected_res = filled_landmark_ekf->getLMEst();
@@ -70,6 +71,4 @@ TEST_CASE("Non-empty EKF") {
 
     // tear-down
     delete filled_landmark_ekf;
-    robot_instance.reset();
-    REQUIRE(robot_instance.use_count() == 0); // check correct release of robot manager
 }
