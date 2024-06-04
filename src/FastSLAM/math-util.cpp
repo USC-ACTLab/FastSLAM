@@ -1,5 +1,5 @@
 /**
- * @file probability.cpp
+ * @file math-util.cpp
  * @brief Implements common probability distributions and their samplers.
  */
 

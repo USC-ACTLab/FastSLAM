@@ -26,7 +26,7 @@ namespace MathUtil {
  * @param[in]    aWorld_quant  2D quantity in world frame
  * @param[in]    aTheta_rad    Robot heading angle in randians
  *
- * @returns quantity in robot frame
+ * @return quantity in robot frame
  */
 std::pair<float, float> worldToBody2D( const std::pair<float, float>& aWorld_quant,
                                        const float aTheta_rad);
@@ -39,7 +39,7 @@ std::pair<float, float> worldToBody2D( const std::pair<float, float>& aWorld_qua
  * @param[in]    aBody_pose   2D quantity in robot frame
  * @param[in]    aTheta_rad    Robot heading angle in randians
  *
- * @returns quantity in world frame
+ * @return quantity in world frame
  */
 std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant,
                                       const float aTheta_rad);
@@ -58,7 +58,7 @@ std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant
  * @param[in]     aMean       Mean of the sampled Normal distribution
  * @param[in]     aVariance   Variance of the sampled Normal distribution
  *
- * @returns Random value, distributed according to the defined Gaussian
+ * @return Random value, distributed according to the defined Gaussian
  */
 float sampleNormal( const float aMean, const float aVariance );
 

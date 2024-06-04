@@ -6,11 +6,18 @@
 #pragma once
 
 #include <optional>
+#include <Eigen/Dense>
 
 /** A point (position only) in the 2D plane. */
 struct Point2D {
    float x;           // x-coordinate (scaled in meters)
    float y;           // y-coordinate (scaled in meters)
+
+   struct Point2D& operator+=(const Eigen::Vector2f& rhs) {
+      x += rhs[0];
+      y += rhs[1];
+      return *this;
+   }
 };
 
 /** A pose (position and orientation) in the 2D plane. */
@@ -18,6 +25,7 @@ struct Pose2D {
    float x;           // x-coordinate (scaled in meters)
    float y;           // y-coordinate (scaled in meters)
    float theta_rad;   // heading (radians) wrapped into [-pi, pi]
+
 };
 
 /**
@@ -41,4 +49,15 @@ struct Observation2D {
     *    Populating/clearing this field may be more trouble than it's worth...
     */
    std::optional<int> landmarkID;
+
+   /**
+    * @brief overloaded difference operator for residual calculation
+    * @return an eigen column vector representing the residual
+    */
+   Eigen::Vector2f operator-(const struct Observation2D& rhs) const {
+      float range_diff = this->range_m - rhs.range_m;
+      float bearing_diff = this->bearing_rad - rhs.bearing_rad;
+
+      return Eigen::Vector2f(range_diff, bearing_diff);
+   }
 };
