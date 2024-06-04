@@ -39,12 +39,18 @@ TEST_CASE("Empty EKF"){
 TEST_CASE("Non-empty EKF") {
     // set-up
     struct Pose2D init_pose = { .x = 0, .y =0, .theta_rad = 0 };
-    struct VelocityCommand2D init_cmd = { .vx_mps = 0, .wz_radps = 0 };
-    struct Point2D init_obs = { .x = 1, .y = 0 };
+    struct VelocityCommand2D init_cmd = { .vx_mps = 1, .wz_radps = 0 };
+    struct Point2D init_obs = { .x = 0, .y = 1 };
     Eigen::Matrix2f init_cov;
     init_cov << 1, 0,
         0, 1;
+
+#ifdef USE_MOCK
+    std::shared_ptr<RobotManager2D> robot_instance = std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov);
+    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov);
+#elif defined(USE_SIM)
     std::shared_ptr<RobotManager2D> robot_instance = std::make_shared<Create3Manager>(init_pose, init_cmd, init_cov);
+#endif
 
     LMEKF2D* filled_landmark_ekf = new LMEKF2D(init_obs, init_cov, robot_instance);
     REQUIRE(robot_instance.use_count() == 2); // check correct ownership changes
@@ -61,8 +67,11 @@ TEST_CASE("Non-empty EKF") {
 
     }
 
+    //TODO: needs numerical sim and mock manager
     SECTION("Test: one step updates correctly") {
-        // TODO: requires mock-up robot manager
+#ifdef USE_MOCK
+        test_manager->sampleIMU();
+#endif //USE_MOCK
     }
 
     SECTION("Test: calculation of correct observation correspondence") {

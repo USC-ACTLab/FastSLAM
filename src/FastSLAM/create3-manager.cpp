@@ -1,9 +1,9 @@
+/**
+ * @file create3-manager.cpp
+ * @brief defines the create3 manager class and methods
+ */
 #include "robot-manager.h"
 
-
-Create3Manager::Create3Manager() {
-    std::cout << "Create 3 Manager created" << std::endl;
-}
 
 void Create3Manager::sampleIMU(){
     (void) 0;
@@ -14,14 +14,14 @@ void Create3Manager::sampleLandMark() {
 void Create3Manager::sampleControl() {
     (void) 0;
 }
-void Create3Manager::motionUpdate() {
-    (void) 0;
+struct Pose2D Create3Manager::motionUpdate() {
+    return {.x = 0, .y = 0, .theta_rad = 0};
 }
 
 struct Observation2D Create3Manager::getCurrObs() const {
     return m_curr_obs;
 }
-struct Observation2D Create3Manager::predictMeas() {
+struct Observation2D Create3Manager::predictMeas(const struct Point2D mu_prev) {
     struct Observation2D ret = {.range_m = 0, .bearing_rad = 0, .landmarkID = 0};
     return ret;
 }
