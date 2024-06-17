@@ -33,7 +33,7 @@ Based on the general algorithm, we form our implementation with the following co
 1. Mathematical Utilities: coordinate, measurement and pose structs with helper functions
 2. RobotManager: robot-facing utilities. Any sensor interfacing functions and robot control schemes will fall under this category/class
 3. EKF: template for all EKF instances; contains all necessary fields/methods to maintain landmark EKFs
-4. Particle Filter: simple class for a Raos-Blackwellised particle filter. Manages instances of EKF within particles and provides sampling utilities to update
+4. Particle Filter: simple class for a Rao-Blackwellised particle filter. Manages instances of EKF within particles and provides sampling utilities to update
 5. FastSLAM: general manager class that carries out the entire algorithm; interfaces with particle filter, EKFs, Robot manager, and any supporting services (e.g. simulation, visualization, etc).
 
 We will break down the design of each component in the next section.
