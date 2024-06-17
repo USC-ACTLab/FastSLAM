@@ -7,23 +7,24 @@
 
 
 LMEKF2D::LMEKF2D() {
-
    m_mu = { .x = 0, .y = 0 };
-
    m_sigma = Eigen::Matrix2f::Zero();
-
+   m_curr_obs = { .range_m = 0, .bearing_rad = 0, .landmarkID = std::nullopt};
    m_robot = nullptr;
-
+   m_meas_cov = Eigen::Matrix2f::Zero();
 }
 
 LMEKF2D::LMEKF2D(struct Point2D init_obs, Eigen::Matrix2f init_cov,
                  std::shared_ptr<RobotManager2D> robot_ptr) : m_mu(init_obs),
    m_sigma(init_cov),
    m_robot(robot_ptr) {
+   m_curr_obs = { .range_m = 0, .bearing_rad = 0, .landmarkID = std::nullopt};
+   m_meas_cov = Eigen::Matrix2f::Zero();
 }
 
-LMEKF2D::~LMEKF2D() {
-   m_robot.reset();
+LMEKF2D::LMEKF2D(const LMEKF2D& ekf):
+    m_mu(ekf.m_mu),m_sigma(ekf.m_sigma),
+    m_robot(ekf.m_robot), m_meas_cov(ekf.m_meas_cov), m_curr_obs(ekf.m_curr_obs){
 }
 
 Eigen::Matrix2f LMEKF2D::measJacobian() const {
@@ -56,7 +57,7 @@ KF_RET LMEKF2D::update() {
         Eigen::Matrix2f K = this->calcKalmanGain();
         Eigen::Matrix2f G_n = this->measJacobian();
 
-        m_mu += K * ( m_robot->getCurrObs() - m_robot->predictMeas(m_mu) );
+        m_mu += K * ( m_curr_obs - m_robot->predictMeas(m_mu) );
         m_sigma = ( Eigen::Matrix2f::Identity() - K * G_n ) * m_sigma;
     }
 
@@ -73,13 +74,17 @@ float LMEKF2D::calcCPD() {
         return -1.0f;
     }
 
-    Eigen::Vector2f residue = m_robot->getCurrObs() - m_robot->predictMeas(m_mu);
-    float weight = sqrtf( (2 * M_PI * m_meas_cov).determinant() );
+    Eigen::Vector2f residue = m_curr_obs - m_robot->predictMeas(m_mu);
+    float weight = 1 / sqrtf( (2 * M_PI * m_meas_cov).determinant() );
     weight = weight * expf( -0.5 * residue.transpose() * m_meas_cov.inverse() * residue );
 
     return weight;
 }
 
-struct Point2D LMEKF2D::getLMEst() const {
+const struct Point2D& LMEKF2D::getLMEst() const {
    return m_mu;
+}
+
+void LMEKF2D::updateObservation(const struct Observation2D &new_obs) {
+    m_curr_obs = new_obs;
 }

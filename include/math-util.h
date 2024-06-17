@@ -52,9 +52,6 @@ std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant
  *    C++ has a built in normal distribution template, see:
  *    https://en.cppreference.com/w/cpp/numeric/random/normal_distribution
  *
- *    TODO: Ensure we're talking about stddev and variance correctly,
- *       because ProbRob has a typo somewhere in Table 5.4. Beware!
- *
  * @param[in]     aMean       Mean of the sampled Normal distribution
  * @param[in]     aVariance   Variance of the sampled Normal distribution
  *
@@ -62,5 +59,42 @@ std::pair<float, float> bodyToWorld2D(const std::pair<float, float>& aBody_quant
  */
 float sampleNormal( const float aMean, const float aVariance );
 
+/**
+ * @brief Generates a random sample from the Uniform [min, max)
+ *
+ * @param[in] aMin: minimum value of the range
+ * @param[in] aMax: maximum value of the range
+ *
+ * @return Random value, distributed according to the defined Uniform
+ */
+float sampleUniform( const float& aMin, const float& aMax );
+
+/**
+ * @brief Finds the distance between two points
+ *
+ * @param[in] aPointA: a 2D point
+ * @param[in] aPointB: a 2D point
+ * @return the absolute distance between two points
+ */
+float findDist( const struct Point2D& aPointA, const struct Point2D& aPointB );
+
+/**
+ * @brief overloaded version of findDist, used specifically for robot and landmark
+ *
+ * @param[in] aPointA:  landmark position
+ * @param[in] aRobPose: robot pose
+ * @return distance between landmark and robot
+ */
+float findDist( const struct Point2D& aLandMark, const struct Pose2D& aRobPose );
+
+/**
+ * @brief generate a cumulative cdf table based on pdf weights
+ *
+ * @param[in] aPdfVec: vector containing pdf values
+ * @param[in] aTargetVec: reference to the vector containing results
+ * @return sum of the all elements
+ */
+template< class T >
+T genCDF( const std::vector<T>& aPdfVec, std::vector<T>& aTargetVec );
 
 }; // namespace MathUtil

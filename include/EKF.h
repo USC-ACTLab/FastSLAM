@@ -36,8 +36,6 @@ public:
 
 class LandMarkEKF : public EKFBase {
 
-protected:
-
 public:
 
    /**
@@ -54,7 +52,7 @@ public:
 
 };
 
-class LMEKF2D final: public LandMarkEKF {
+class LMEKF2D final: public EKFBase {
 
 private:
 
@@ -77,6 +75,11 @@ private:
     * @brief measurement covariance matrix, used for correspondence weight and K-gain calculation
     */
    Eigen::Matrix2f m_meas_cov;
+
+   /**
+    * @brief local copy of current robot observation
+    */
+   struct Observation2D m_curr_obs;
 
    /**
     * @brief measurement jacobian helper function, takes the Jacobian of g(s, mu)
@@ -113,9 +116,12 @@ public:
            std::shared_ptr<RobotManager2D> robot_ptr);
 
    /**
-    * @brief default destructor
+    * @brief copy assignment operator, used in the particle filter
+    * when drawing particles
+    *
+    * @param[in] ekf: EKF to be copied from
     */
-   ~LMEKF2D();
+    LMEKF2D(const LMEKF2D& ekf);
 
    /**
     * @brief advances internal beliefs of 2D Landmark using the prediction model
@@ -132,14 +138,21 @@ public:
 
    /**
     * @brief calculates likelihood of correspondence given the measurement and prediction
+    * @details we are not using robot manager to get measurement here to guarantee the timing of measurements
     * @return float; scalar value measuring likelihood that the observation matches internal state
     */
-   float calcCPD() override;
+   float calcCPD();
 
    /**
     * @brief returns current landmark position estimate in world frame
     * @return a 2D point struct with landmark x and y position
     * */
-   struct Point2D getLMEst() const;
+   const struct Point2D& getLMEst() const;
+
+   /**
+    * @brief update internal copy of current robot observations
+    * @details this ensures timing in constrast to the sampling approach. Must be called first every cycle
+    */
+    void updateObservation(const struct Observation2D& new_obs);
 
 };

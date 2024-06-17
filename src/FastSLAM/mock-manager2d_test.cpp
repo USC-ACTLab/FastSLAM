@@ -13,7 +13,7 @@ TEST_CASE( "Test MockManager Numerical Sim" ) {
     Eigen::Matrix2f init_cov;
     init_cov << 1, 0,
         0, 1;
-    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov);
+    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov, 0);
 
     SECTION( "MockManager: Test Motion Update" ){
         struct Pose2D expected = { .x = 1, .y = 0, .theta_rad = 0 };
@@ -149,6 +149,17 @@ TEST_CASE( "Test MockManager Numerical Sim" ) {
 
     }
 
+    SECTION( "MockManager: test inverse measurement function" ){
+
+        SECTION( "Position 1: Landmark behind robot" ){
+            struct Point2D expected = {.x = -1, .y = 0};
+            auto res = test_manager->inverseMeas({.x = 0, .y = 0}, {.range_m = 1, .bearing_rad = M_PI});
+            REQUIRE_THAT( res.x, Catch::Matchers::WithinRel(expected.x, 0.001f) ||
+                          Catch::Matchers::WithinAbs(expected.x, 0.00001f) );
+            REQUIRE_THAT( res.y, Catch::Matchers::WithinRel(expected.y, 0.001f) ||
+                          Catch::Matchers::WithinAbs(expected.y, 0.00001f) );
+        }
+    }
 }
 
 #endif // USE_MOCK
