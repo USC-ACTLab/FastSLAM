@@ -56,7 +56,7 @@ KF_RET LMEKF2D::update() {
         Eigen::Matrix2f K = this->calcKalmanGain();
         Eigen::Matrix2f G_n = this->measJacobian();
 
-        m_mu += K * ( m_robot->getCurrObs() - m_robot->predictMeas() );
+        m_mu += K * ( m_robot->getCurrObs() - m_robot->predictMeas(m_mu) );
         m_sigma = ( Eigen::Matrix2f::Identity() - K * G_n ) * m_sigma;
     }
 
@@ -73,7 +73,7 @@ float LMEKF2D::calcCPD() {
         return -1.0f;
     }
 
-    Eigen::Vector2f residue = m_robot->getCurrObs() - m_robot->predictMeas();
+    Eigen::Vector2f residue = m_robot->getCurrObs() - m_robot->predictMeas(m_mu);
     float weight = sqrtf( (2 * M_PI * m_meas_cov).determinant() );
     weight = weight * expf( -0.5 * residue.transpose() * m_meas_cov.inverse() * residue );
 

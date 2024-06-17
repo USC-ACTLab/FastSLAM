@@ -36,6 +36,11 @@ struct VelocityCommand2D {
    float wz_radps;    // Robot-frame angular velocity (radians per second)
 };
 
+/**
+ * @brief scoped enum for handling non-observation landmarks
+ */
+enum class NONE_OBS_LM {prediction = -1, unknown_lm = -2};
+
 /** An observation of a landmark as viewed from the robot's perspective. */
 struct Observation2D {
    float range_m;     // Range from the robot to the landmark (meters)

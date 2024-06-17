@@ -1,8 +1,11 @@
 add_library(FastSLAMLib
    math-util.cpp
    EKF.cpp
-   robot-manager.cpp
+   create3-manager.cpp
 )
+if(USE_MOCK)
+    target_sources(FastSLAMLib PUBLIC mock-manager2d.cpp)
+endif()
 
 target_include_directories(FastSLAMLib PUBLIC
                            "${PROJECT_BINARY_DIR}"
@@ -23,6 +26,22 @@ if(BUILD_TESTS)
   )
 
   add_executable(test_EKF EKF_test.cpp)
+
+  if(USE_MOCK)
+    target_compile_definitions(test_EKF PUBLIC USE_MOCK)
+    add_executable(test_MockManager2d mock-manager2d_test.cpp)
+    target_compile_definitions(test_MockManager2d PUBLIC USE_MOCK)
+    target_link_libraries(test_MockManager2d
+                        PRIVATE Catch2::Catch2WithMain
+                        FastSLAMLib)
+    catch_discover_tests(test_MockManager2d)
+    target_include_directories(test_MockManager2d PUBLIC
+      "${PROJECT_BINARY_DIR}"
+      "${PROJECT_SOURCE_DIR}/include"
+    )
+  else()
+    target_compile_definitions(test_EKF PUBLIC USE_SIM)
+  endif()
   target_link_libraries(test_EKF
                         PRIVATE Catch2::Catch2WithMain
                         FastSLAMLib)
