@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['calcgaussianprobability_3',['calcGaussianProbability',['../namespaceProbability.html#ac5998cc8478872d29db52f6e230821db',1,'Probability']]],
-  ['core_2dstructs_2eh_4',['core-structs.h',['../core-structs_8h.html',1,'']]]
+  ['bodytoworld2d_3',['bodyToWorld2D',['../namespaceMathUtil.html#ab5f157d440731a896a752f17d8e57976',1,'MathUtil']]]
 ];

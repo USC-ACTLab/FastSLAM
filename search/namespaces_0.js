@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['probability_24',['Probability',['../namespaceProbability.html',1,'']]]
+  ['mathutil_66',['MathUtil',['../namespaceMathUtil.html',1,'']]]
 ];

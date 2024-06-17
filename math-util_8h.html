@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastSLAM: include/probability.h File Reference</title>
+<title>FastSLAM: include/math-util.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,34 +70,38 @@ $(function() {
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">probability.h File Reference</div>  </div>
+<div class="title">math-util.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Defines common probability distributions and their samplers.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;random&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;limits.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="core-structs_8h_source.html">core-structs.h</a>&quot;</code><br />
 </div>
-<p><a href="probability_8h_source.html">Go to the source code of this file.</a></p>
+<p><a href="math-util_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:namespaceProbability"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceProbability.html">Probability</a></td></tr>
-<tr class="memdesc:namespaceProbability"><td class="mdescLeft">&#160;</td><td class="mdescRight">Namespace for common probability utility functions. <br /></td></tr>
+<tr class="memitem:namespaceMathUtil"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMathUtil.html">MathUtil</a></td></tr>
+<tr class="memdesc:namespaceMathUtil"><td class="mdescLeft">&#160;</td><td class="mdescRight">Namespace for common math utility functions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a56f401531f970465d54bb680b04c50d3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceProbability.html#a56f401531f970465d54bb680b04c50d3">Probability::sampleNormal</a> (const double aMean, const double aVariance)</td></tr>
-<tr class="memdesc:a56f401531f970465d54bb680b04c50d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a random sample from the Gaussian: N(mean, variance).  <a href="namespaceProbability.html#a56f401531f970465d54bb680b04c50d3">More...</a><br /></td></tr>
-<tr class="separator:a56f401531f970465d54bb680b04c50d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5998cc8478872d29db52f6e230821db"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceProbability.html#ac5998cc8478872d29db52f6e230821db">Probability::calcGaussianProbability</a> (const double aValue, const double aVariance)</td></tr>
-<tr class="memdesc:ac5998cc8478872d29db52f6e230821db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value's probability from the Gaussian: N(0, variance).  <a href="namespaceProbability.html#ac5998cc8478872d29db52f6e230821db">More...</a><br /></td></tr>
-<tr class="separator:ac5998cc8478872d29db52f6e230821db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02bb6e464a890ab1e1016516107a0668"><td class="memTemplParams" colspan="2">template&lt;typename Particle_T &gt; </td></tr>
-<tr class="memitem:a02bb6e464a890ab1e1016516107a0668"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Particle_T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceProbability.html#a02bb6e464a890ab1e1016516107a0668">Probability::resampleLowVariance</a> (const std::vector&lt; std::pair&lt; Particle_T, double &gt; &gt; &amp;aWeightedParticles)</td></tr>
-<tr class="memdesc:a02bb6e464a890ab1e1016516107a0668"><td class="mdescLeft">&#160;</td><td class="mdescRight">Samples a vector (with replacement) using a low-variance strategy.  <a href="namespaceProbability.html#a02bb6e464a890ab1e1016516107a0668">More...</a><br /></td></tr>
-<tr class="separator:a02bb6e464a890ab1e1016516107a0668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af612a94c3ff579f82ce5fb21813fc408"><td class="memItemLeft" align="right" valign="top">std::pair&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMathUtil.html#af612a94c3ff579f82ce5fb21813fc408">MathUtil::worldToBody2D</a> (const std::pair&lt; float, float &gt; &amp;aWorld_quant, const float aTheta_rad)</td></tr>
+<tr class="memdesc:af612a94c3ff579f82ce5fb21813fc408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a 2d quantity from world frame to body frame.  <a href="namespaceMathUtil.html#af612a94c3ff579f82ce5fb21813fc408">More...</a><br /></td></tr>
+<tr class="separator:af612a94c3ff579f82ce5fb21813fc408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f157d440731a896a752f17d8e57976"><td class="memItemLeft" align="right" valign="top">std::pair&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMathUtil.html#ab5f157d440731a896a752f17d8e57976">MathUtil::bodyToWorld2D</a> (const std::pair&lt; float, float &gt; &amp;aBody_quant, const float aTheta_rad)</td></tr>
+<tr class="memdesc:ab5f157d440731a896a752f17d8e57976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a 2d quantity from robot frame to world frame.  <a href="namespaceMathUtil.html#ab5f157d440731a896a752f17d8e57976">More...</a><br /></td></tr>
+<tr class="separator:ab5f157d440731a896a752f17d8e57976"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae08685d342fe745b984b6b25ae615c9a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMathUtil.html#ae08685d342fe745b984b6b25ae615c9a">MathUtil::sampleNormal</a> (const float aMean, const float aVariance)</td></tr>
+<tr class="memdesc:ae08685d342fe745b984b6b25ae615c9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a random sample from the Gaussian: N(mean, variance).  <a href="namespaceMathUtil.html#ae08685d342fe745b984b6b25ae615c9a">More...</a><br /></td></tr>
+<tr class="separator:ae08685d342fe745b984b6b25ae615c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines common probability distributions and their samplers. </p>

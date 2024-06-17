@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['test_5feigen_32',['test_eigen',['../test_8h.html#a74101a7d37fa79beca8544227f1ab779',1,'test.h']]],
-  ['test_5ffunc_33',['test_func',['../test_8h.html#a5d474ab7da4c0ebd0b880fe584a8f2c5',1,'test.h']]],
-  ['testclass_34',['TestClass',['../classTestClass.html#a09903432ed60c7c38f1beccc4cf18987',1,'TestClass']]]
+  ['lmekf2d_80',['LMEKF2D',['../classLMEKF2D.html#a2f7f19da0c97d3b841ce21554c6b9953',1,'LMEKF2D::LMEKF2D()'],['../classLMEKF2D.html#a278508d86b8c6e1b2c120acf53f978a0',1,'LMEKF2D::LMEKF2D(struct Point2D init_obs, Eigen::Matrix2f init_cov, std::shared_ptr&lt; RobotManager2D &gt; robot_ptr)']]]
 ];
