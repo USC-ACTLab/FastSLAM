@@ -49,9 +49,19 @@ protected:
     const Eigen::Matrix2f m_meas_noise;
 
     /**
+     * @brief robot landmark sensor measurement noise, constant
+     */
+    const Eigen::Matrix3f m_process_noise;
+
+    /**
      * @brief current landmark observation data (robot frame)
      */
     struct Observation2D m_curr_obs;
+
+    /**
+     * @brief perceputal range of the robot, used for pruning dubious features
+     */
+     const float m_perceptual_range;
 
     /**
      * @brief abstract class constructor to instantiate member variables
@@ -59,8 +69,8 @@ protected:
      */
     RobotManager2D(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise) : m_curr_pose(init_pose),
-        m_curr_command(init_cmd), m_meas_noise(meas_noise){
+                   Eigen::Matrix2f meas_noise, float robot_pr) : m_curr_pose(init_pose),
+        m_curr_command(init_cmd), m_meas_noise(meas_noise), m_perceptual_range(robot_pr){
         m_curr_obs = { .range_m = 0, .bearing_rad = 0 };
     }
 
@@ -80,8 +90,21 @@ public:
 
     /**
      * @brief predicts the measurement based on sensor's measurement model and robot trajectory
+     *
+     * @param[in] mu_prev: previous landmark location belief
+     * @return a predicted landmark observation measurement with special ID
      */
-    virtual struct Observation2D predictMeas(const struct Point2D mu_prev) = 0;
+    virtual struct Observation2D predictMeas(const struct Point2D& mu_prev) = 0;
+
+    /**
+     * @brief use provided measurement and robot pose to infer landmakr location
+     *
+     * @param[in] rob_pose: current robot pose; note that the caller is responsible to provide a pose
+     * @param[in] curr_obs: current landmark observation
+     * @return a deduced landmark location in global frame
+     */
+    virtual struct Point2D inverseMeas(const struct Pose2D& rob_pose,
+                                       const struct Observation2D& curr_obs) const = 0;
 
     /**
      * @brief get the latest robot observation
@@ -95,13 +118,26 @@ public:
      * @param[in] mu_prev: previous landmark position belief
      * @return a 2x2 matrix with eq conditions plugged in
      */
-    virtual Eigen::Matrix2f measJacobian(const struct Point2D mu_prev) const = 0;
+    virtual Eigen::Matrix2f measJacobian(const struct Point2D& mu_prev) const = 0;
 
     /**
      * @brief get current robot measurement noise
      * @return a 2x2 sensor covariance matrix
      */
     virtual Eigen::Matrix2f getMeasNoise() const = 0;
+
+    /**
+     * @brief get current robot process(pose) noise
+     * @return a 2x2 motion sensor covariance matrix
+     */
+    virtual Eigen::Matrix3f getProcessNoise() const = 0;
+
+    /**
+     * @brief get robot landmark sensor perception range
+     *
+     * @return landmark sensor maximum range
+     */
+    virtual const float& getPerceptualRange() const {return m_perceptual_range;};
 
 };
 
@@ -120,7 +156,8 @@ public:
      */
     Create3Manager(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise): RobotManager2D(init_pose, init_cmd, meas_noise) {}
+                   Eigen::Matrix2f meas_noise, float robot_pr):
+        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr) {}
 
     /**
      * @brief default Create3 class destructor
@@ -158,12 +195,22 @@ public:
     struct Observation2D getCurrObs() const override;
 
     /**
+     * @brief use inverse Create3 lidar measurement model to deduce landmark location
+     *
+     * @param[in] rob_pose: current robot pose; note that the caller is responsible to provide a pose
+     * @param[in] curr_obs: current landmark observation
+     * @return a deduced landmark location in global frame
+     */
+    struct Point2D inverseMeas(const struct Pose2D& rob_pose,
+                               const struct Observation2D& curr_obs) const override;
+
+    /**
      * @brief predict landmark measurement given robot states
      * @details estimation is conditioned on previous landmark position and robot pose
      *
      * @return a "proposed" landmark observation
      */
-    struct Observation2D predictMeas(const struct Point2D mu_prev) override;
+    struct Observation2D predictMeas(const struct Point2D& mu_prev) override;
 
     /**
      * @brief calculates the jacobian of the create3 landmark measurement model
@@ -171,12 +218,17 @@ public:
      * @param[in] mu_prev: previous landmark position belief
      * @return a 2x2 jacobian matrix given robot pose and previous landmark pose
      */
-    Eigen::Matrix2f measJacobian(const struct Point2D mu_prev) const override;
+    Eigen::Matrix2f measJacobian(const struct Point2D& mu_prev) const override;
 
     /**
      * @brief get Create3 sensor measurement noise
      */
     Eigen::Matrix2f getMeasNoise() const override;
+
+    /**
+     * @brief get Create3 motion measurement noise
+     */
+     Eigen::Matrix3f getProcessNoise() const override;
 };
 
 #ifdef USE_MOCK
@@ -188,7 +240,8 @@ public:
 
     MockManager2D(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise): RobotManager2D(init_pose, init_cmd, meas_noise) {}
+                   Eigen::Matrix2f meas_noise, float robot_pr):
+        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr) {}
 
     ~MockManager2D() {};
 
@@ -202,11 +255,16 @@ public:
 
     struct Observation2D getCurrObs() const override;
 
-    struct Observation2D predictMeas(const struct Point2D mu_prev) override;
+    struct Point2D inverseMeas(const struct Pose2D& rob_pose,
+                               const struct Observation2D& curr_obs) const override;
 
-    Eigen::Matrix2f measJacobian(const struct Point2D mu_prev) const override;
+    struct Observation2D predictMeas(const struct Point2D& mu_prev) override;
+
+    Eigen::Matrix2f measJacobian(const struct Point2D& mu_prev) const override;
 
     Eigen::Matrix2f getMeasNoise() const override;
+
+    Eigen::Matrix3f getProcessNoise() const override;
 
 
     // test commands

@@ -46,14 +46,19 @@ TEST_CASE("Non-empty EKF") {
         0, 1;
 
 #ifdef USE_MOCK
-    std::shared_ptr<RobotManager2D> robot_instance = std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov);
-    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov);
+    std::shared_ptr<MockManager2D> test_manager =
+        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0);
+    std::shared_ptr<RobotManager2D> robot_instance(test_manager);
 #elif defined(USE_SIM)
-    std::shared_ptr<RobotManager2D> robot_instance = std::make_shared<Create3Manager>(init_pose, init_cmd, init_cov);
+    std::shared_ptr<RobotManager2D> robot_instance =
+        std::make_shared<Create3Manager>(init_pose, init_cmd, init_cov, 0);
 #endif
 
-    LMEKF2D* filled_landmark_ekf = new LMEKF2D(init_obs, init_cov, robot_instance);
-    REQUIRE(robot_instance.use_count() == 2); // check correct ownership changes
+    std::unique_ptr<LMEKF2D> filled_landmark_ekf =
+        std::make_unique<LMEKF2D>(init_obs, init_cov, robot_instance);
+#ifdef USE_MOCK
+    REQUIRE(robot_instance.use_count() == 3); // check correct ownership changes
+#endif //USE_MOCK
 
     SECTION("Test: prediction does not change state") {
         struct Point2D expected_res = filled_landmark_ekf->getLMEst();
@@ -77,7 +82,4 @@ TEST_CASE("Non-empty EKF") {
     SECTION("Test: calculation of correct observation correspondence") {
         //TODO: requires mock-up robot manager
     }
-
-    // tear-down
-    delete filled_landmark_ekf;
 }

@@ -22,6 +22,7 @@ find_package (Eigen3 3.4 REQUIRED NO_MODULE)
 # testing set up
 option(BUILD_TESTS "Build Tests" OFF)
 option(USE_MOCK "Use Mocked Robot" OFF)
+option(LM_CLEANUP "Enable landmark cleaning" OFF)
 if(BUILD_TESTS)
     find_package(Catch2 3 REQUIRED)
     include(CTest)

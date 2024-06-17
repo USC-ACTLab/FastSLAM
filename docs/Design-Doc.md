@@ -87,14 +87,27 @@ Since each particle will contain `K` EKF instances given `K` landmarks, one of o
 
 The FastSLAM system employs a [Rao-Blackwellised Particle Filter](https://www.cs.cmu.edu/~motionplanning/reading/boris-presentation.pdf) to estimate the collective posterior of robot pose and landmark positions. 
 
-Particles in the filter can be represented by `std::pair`s of robot pose and landmark observations. Here we can use the `std::map` associative container to represent the set of landmarks, identified by their positive indices. Some work might be needed to support the use of `std::map` with landmark objects. In C++, `std::map` is implemented using red-black trees, a form of self-balancing Binary Search Trees.
+#### 1. Particles
+
+Particles in the filter contain robot pose estimate, *K* landmark EKF gaussians and a data association index. Here we can use the `std::vector` associative container to represent the set of landmark gaussians with the number of sightings. The authors in the paper chose to use a self-balancing binary search tree, but we choose to use a vector for *O(1)* random access time and insertion-at-back time. Solving the data asscociation problem takes *O(n)* time complexity, so it does not make sense for the program to take additional *O(logn)* time for look up and insertion.
 
 Each particle will take ownership and responsibility of `K` EKF instances given `K` landmarks, and each particle, given a measurement and process input, will update the robot pose and EKFs. The particle filter is agnostic to the source of these inputs. It is up to the FastSLAM system to feed process and measurement input to the particle filter at the correct timing.
 
-Public functions of this class include:
+Public functions of the Particle class include:
 - `matchLandMark`: match the observation to landmark given the MLE weights calculated by EKF instances
-- `particleUpdate`: function to update all particles given process and measurement input.
-- `particleRegen`: Resample the auxiliary set of particles based on the probabilities proportional to weight.
+- `updateParticle`: function to update all particles given process and measurement input.
+
+As well as supplementary observer functions. Because particles will be copied during the sampling process in a particle filter, we also make sure to supply a copy constructor for the class.
+
+#### 2. Particle Filter
+
+The particle filter will be responsible for managing all particles, as well as supplying data to the particles for internal updates. Lastly, the particle filter will also be responsible for managing importance factors and regenerate particles through sampling.
+
+The set of particles will be represented through a `std::unordered_map` of index-particle pairs. We choose to do this for the *O(1)* search, insertion and removal time.
+
+The Particle Filter class have one important public interface:
+- `updateFilter`: update and resample particles given new robot pose and measurement.
+
 
 ### V. FastSLAM
 This is the general main driver class that ties all components of the FastSLAM together as well as interfaces with other services. This class remains a bit undefined for now, since we are unsure of what supporting services we want with the same. Regardless, this class should initialize all components of the FastSLAM, configure initial conditions, and use the components to carry out the state estimation.

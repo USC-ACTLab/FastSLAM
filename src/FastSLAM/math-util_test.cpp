@@ -136,3 +136,38 @@ TEST_CASE("Test foward-inverse transform: bodyToWorld") {
                             Catch::Matchers::WithinAbs(target.second, 0.00001f) );
 
 }
+
+TEST_CASE( "Test CDF table generation" ){
+
+   SECTION( "test vector of float" ){
+      std::vector<float> pdf {0.1, 0.3, 0.4, 0.2};
+      std::vector<float> cdf_target {0.1, 0.4, 0.8, 1};
+      std::vector<float> cdf;
+      MathUtil::genCDF(pdf, cdf);
+      int idx = 0;
+      for (const auto& it: cdf_target) {
+         REQUIRE_THAT( it, Catch::Matchers::WithinRel(cdf[idx], 0.001f) ||
+                       Catch::Matchers::WithinAbs(cdf[idx], 0.00001f) );
+         idx++;
+      }
+   }
+
+   SECTION( "test vector of int" ){
+      std::vector<int> pdf {0, 1, 2, 3};
+      std::vector<int> cdf_target {0, 1, 3, 6};
+      std::vector<int> cdf;
+      MathUtil::genCDF(pdf, cdf);
+      int idx = 0;
+      for (const auto& it: cdf_target) {
+         REQUIRE( it == cdf[idx] );
+         idx++;
+      }
+   }
+
+   SECTION( "test empty vector" ){
+      std::vector<int> pdf;
+      std::vector<int> cdf;
+      MathUtil::genCDF(pdf, cdf);
+      REQUIRE( cdf.empty() );
+   }
+}
