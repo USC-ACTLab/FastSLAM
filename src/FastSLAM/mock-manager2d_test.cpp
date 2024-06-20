@@ -102,14 +102,53 @@ TEST_CASE( "Test MockManager Numerical Sim" ) {
         }
     }
 
-    SECTION( "MockManager: test lidar measurement jacobian" ){
+    SECTION( "MockManager: test lidar measurement jacobian" ) {
+    
+    
+        SECTION( "Config 1: robot + landmark colliding" ) {
+            test_manager->setState({.x = 1, .y = 0, .theta_rad = 0});
+            auto res = test_manager->measJacobian({.x = 1, .y = 0});
+            REQUIRE( res.hasNaN() );
+        }
 
-        SECTION( "Config 1: colliding robot + landmark" ){
-            test_manager->setState({.x = 0, .y = 0, .theta_rad = 0});
-            auto res = test_manager->measJacobian({.x = 0, .y = 0});
-            //REQUIRE( res.hasNaN() );
+        SECTION( "Config 2: robot + landmark not colliding, same x" ) {
+            test_manager->setState({.x = 1, .y = 1, .theta_rad = 0});
+            auto res = test_manager->measJacobian({.x = 1, .y = 0});
+            Eigen::Matrix2f G_expected;
+            G_expected << 0, -1,
+                          1, 0;
+            REQUIRE_THAT(res(0,0), Catch::Matchers::WithinRel(G_expected(0,0), 0.00001f));
+            REQUIRE_THAT(res(0,1), Catch::Matchers::WithinRel(G_expected(0,1), 0.00001f));
+            REQUIRE_THAT(res(1,0), Catch::Matchers::WithinRel(G_expected(1,0), 0.00001f));
+            REQUIRE_THAT(res(1,1), Catch::Matchers::WithinRel(G_expected(1,1), 0.00001f));
+        }
+
+        SECTION( "Config 3: robot + landmark not colliding" ) {
+            test_manager->setState({.x = 1, .y = 0, .theta_rad = 0});
+            auto res = test_manager->measJacobian({.x = 0, .y = 1});
+            Eigen::Matrix2f G_expected;
+            G_expected << -1/(sqrt(2)), 1/(sqrt(2)),
+                          -0.5, -0.5;
+            REQUIRE_THAT(res(0,0), Catch::Matchers::WithinRel(G_expected(0,0), 0.00001f));
+            REQUIRE_THAT(res(0,1), Catch::Matchers::WithinRel(G_expected(0,1), 0.00001f));
+            REQUIRE_THAT(res(1,0), Catch::Matchers::WithinRel(G_expected(1,0), 0.00001f));
+            REQUIRE_THAT(res(1,1), Catch::Matchers::WithinRel(G_expected(1,1), 0.00001f));
+        }
+
+        SECTION( "Config 4: robot + landmark not colliding, same y" ) {
+            test_manager->setState({.x = 1, .y = 1, .theta_rad = 0});
+            auto res = test_manager->measJacobian({.x = 0, .y = 1});
+            Eigen::Matrix2f G_expected;
+            G_expected << -1, 0,
+                          0, -1;
+            REQUIRE_THAT(res(0,0), Catch::Matchers::WithinRel(G_expected(0,0), 0.00001f));
+            REQUIRE_THAT(res(0,1), Catch::Matchers::WithinRel(G_expected(0,1), 0.00001f));
+            REQUIRE_THAT(res(1,0), Catch::Matchers::WithinRel(G_expected(1,0), 0.00001f));
+            REQUIRE_THAT(res(1,1), Catch::Matchers::WithinRel(G_expected(1,1), 0.00001f));
         }
 
     }
+
 }
+
 #endif // USE_MOCK
