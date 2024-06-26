@@ -40,10 +40,23 @@ struct Observation2D MockManager2D::predictMeas(const struct Point2D mu_prev) {
     return {.range_m = range, .bearing_rad = bearing, .landmarkID = static_cast<int>(NONE_OBS_LM::prediction)};
 }
 
-// TODO
 Eigen::Matrix2f MockManager2D::measJacobian(const struct Point2D mu_prev) const {
-   return Eigen::Matrix2f::Zero();
+    float dx = mu_prev.x - m_curr_pose.x;
+    float dy = mu_prev.y - m_curr_pose.y;
+    Eigen::Matrix2f G;
+    if (dx == 0 && dy == 0) {
+        G << NAN, NAN,
+             NAN, NAN;
+    }
+    else {
+        G(0,0) = (dx)/ (sqrtf( powf(dx, 2) + powf(dy, 2) ));
+        G(0,1) = (dy)/ (sqrtf( powf(dx, 2) + powf(dy, 2) ));
+        G(1,0) = -(dy)/ (powf(dy, 2) + powf(dx, 2));
+        G(1,1) = (dx)/ (powf(dy, 2) + powf(dx, 2));
+    };
+    return G;
 }
+
 
 Eigen::Matrix2f MockManager2D::getMeasNoise() const {
     return m_meas_noise;
