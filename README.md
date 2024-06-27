@@ -14,7 +14,7 @@ cmake --build build -j2
 
 To build the tests, instead run:
 ```bash
-cmake -B build -S . -DBUILD_TESTS=ON
+cmake -B build -S . -DBUILD_TESTS=ON -DUSE_MOCK=ON
 cmake --build build -j2
 cd build && ctest
 ```
