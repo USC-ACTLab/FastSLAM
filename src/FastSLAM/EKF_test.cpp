@@ -47,7 +47,7 @@ TEST_CASE("Non-empty EKF") {
 
 #ifdef USE_MOCK
     std::shared_ptr<MockManager2D> test_manager =
-        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0);
+        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0, Eigen::Matrix3f::Zero());
     std::shared_ptr<RobotManager2D> robot_instance(test_manager);
 #elif defined(USE_SIM)
     std::shared_ptr<RobotManager2D> robot_instance =

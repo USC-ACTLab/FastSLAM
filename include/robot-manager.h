@@ -69,8 +69,10 @@ protected:
      */
     RobotManager2D(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise, float robot_pr) : m_curr_pose(init_pose),
-        m_curr_command(init_cmd), m_meas_noise(meas_noise), m_perceptual_range(robot_pr){
+                   Eigen::Matrix2f meas_noise, float robot_pr,
+                   Eigen::Matrix3f process_noise) : m_curr_pose(init_pose),
+        m_curr_command(init_cmd), m_meas_noise(meas_noise), m_perceptual_range(robot_pr),
+        m_process_noise(process_noise){
         m_curr_obs = { .range_m = 0, .bearing_rad = 0 };
     }
 
@@ -156,8 +158,9 @@ public:
      */
     Create3Manager(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise, float robot_pr):
-        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr) {}
+                   Eigen::Matrix2f meas_noise, float robot_pr,
+                   Eigen::Matrix3f process_noise):
+        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr, process_noise) {}
 
     /**
      * @brief default Create3 class destructor
@@ -240,8 +243,9 @@ public:
 
     MockManager2D(struct Pose2D init_pose,
                    struct VelocityCommand2D init_cmd,
-                   Eigen::Matrix2f meas_noise, float robot_pr):
-        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr) {}
+                   Eigen::Matrix2f meas_noise, float robot_pr,
+                   Eigen::Matrix3f process_noise):
+        RobotManager2D(init_pose, init_cmd, meas_noise, robot_pr, process_noise) {}
 
     ~MockManager2D() {};
 
