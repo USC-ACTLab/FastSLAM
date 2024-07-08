@@ -14,7 +14,7 @@ TEST_CASE( "Default Particle" ){
 
 #ifdef USE_MOCK
     std::shared_ptr<RobotManager2D> test_manager =
-        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0);
+        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0, Eigen::Matrix3f::Zero());
     std::unique_ptr<FastSLAMParticles> test_particle =
         std::make_unique<FastSLAMParticles>(0.5, init_pose, test_manager);
 #else
@@ -51,7 +51,7 @@ TEST_CASE( "Test Particle Filter" ){
 
 #ifdef USE_MOCK
     std::shared_ptr<RobotManager2D> test_manager =
-        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0);
+        std::make_shared<MockManager2D>(init_pose, init_cmd, init_cov, 0, Eigen::Matrix3f::Zero());
     std::unique_ptr<FastSLAMPF> test_pf =
         std::make_unique<FastSLAMPF>(test_manager);
 #else

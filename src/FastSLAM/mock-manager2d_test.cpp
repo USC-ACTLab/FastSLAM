@@ -13,7 +13,7 @@ TEST_CASE( "Test MockManager Numerical Sim" ) {
     Eigen::Matrix2f init_cov;
     init_cov << 1, 0,
         0, 1;
-    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov, 0);
+    std::unique_ptr<MockManager2D> test_manager = std::make_unique<MockManager2D>(init_pose, init_cmd, init_cov, 0, Eigen::Matrix3f::Zero());
 
     SECTION( "MockManager: Test Motion Update" ){
         struct Pose2D expected = { .x = 1, .y = 0, .theta_rad = 0 };
