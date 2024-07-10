@@ -28,29 +28,6 @@ FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr):
                {.x = 0, .y = 0, .theta_rad = 0}, DEFAULT_IMPORTANCE_FACTOR) {
 }
 
-struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_delta,
-                                     const struct Pose2D& a_pose_prev) {
-    Eigen::Matrix3f l_cholesky;
-    Eigen::LLT<Eigen::Matrix3f> cholSolver(m_robot->getProcessNoise());
-    if (cholSolver.info()==Eigen::Success) {
-        // Use cholesky solver
-        l_cholesky = cholSolver.matrixL();
-    } else {
-        // Use eigen solver
-        Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigenSolver(m_robot->getProcessNoise());
-        l_cholesky = eigenSolver.eigenvectors()
-            * eigenSolver.eigenvalues().cwiseSqrt().asDiagonal();
-    }
-    Eigen::Vector3f z = Eigen::Vector3f::Zero();
-    for (auto& it: z){
-        it = MathUtil::sampleNormal(0.0f, 1.0f);
-    }
-    struct Pose2D ret = a_pose_prev;
-    ret += a_pose_delta;
-    ret += l_cholesky * z;
-    return ret;
-}
-
 int FastSLAMPF::drawWithReplacement(const std::vector<float>& cdf_vec, float sample){
     int start = 0;
     int end = cdf_vec.size()-1;
@@ -95,7 +72,6 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_delta,
     while (!a_sighting_queue.empty()){
         int idx = 0;
         for (auto& it: m_particle_set){
-            auto rob_pose_sampled = samplePose(a_robot_pose_delta);
             m_particle_weights[idx] += it.second->updateParticle(
                 a_sighting_queue.front(), a_robot_pose_delta);
             idx++;
