@@ -65,6 +65,17 @@ private:
     PF_RET updatePose(const struct Pose2D& new_pose);
 
 
+    /**
+     * @brief sample robot pose based on particle pose; this function is probabilistic
+     * @details credit: https://stackoverflow.com/questions/6142576
+     * /sample-from-multivariate-normal-gaussian-distribution-in-c
+     *
+     * @param[in] a_pose_mean: collected mean delta (control) from sensor
+     * @param[in] a_pose_prev: previous mean pose in particle
+     * @return PF status code
+     */
+    PF_RET samplePose(const struct Pose2D& a_pose_delta);
+
 #ifdef LM_CLEANUP
     /**
      * @brief clean up dubious features by keeping track of sightings
@@ -81,7 +92,7 @@ public:
      * @brief class constructor; must provide importance factor, robot starting pose
      * and robot manager
      */
-    explicit FastSLAMParticles(float p_0, const struct Pose2D& starting_pose,
+    FastSLAMParticles(float p_0, const struct Pose2D& starting_pose,
                                std::shared_ptr<RobotManager2D> rob_mgr):
     m_importance_factor(p_0), m_robot_pose(starting_pose), m_robot(rob_mgr){
         m_data_label = -1;
@@ -103,11 +114,11 @@ public:
      * @brief class template method, runs landmark data association and belief update
      *
      * @param[in] new_obs: new robot landmark observation, unclassified
-     * @param[in] new_pose: new robot pose estimate
+     * @param[in] new_pose_delta: new robot pose control input
      * @return maximum importance factor for resampling
      */
     float updateParticle(const struct Observation2D& new_obs,
-                         const struct Pose2D& new_pose);
+                         const struct Pose2D& new_pose_delta);
 };
 
 class FastSLAMPF {
@@ -132,16 +143,6 @@ private:
      * @brief number of particles in the filter
      */
     unsigned int m_num_particles;
-
-    /**
-     * @brief sample robot pose; this function is probabilistic
-     * @details credit: https://stackoverflow.com/questions/6142576
-     * /sample-from-multivariate-normal-gaussian-distribution-in-c
-     *
-     * @param[in] a_pose_mean: collected mean pose from sensor
-     * @return a 2D pose sampled from the robot's motion distribution
-     */
-    struct Pose2D samplePose(const struct Pose2D& a_pose_mean);
 
     /**
      * @brief resample particles with replacement based on the weights
@@ -179,10 +180,10 @@ public:
     /**
      * @brief update and resample particles given new pose mean and lm observation
      *
-     * @param[in] a_robot_pose_mean: robot mean pose, sampled directly from sensors
+     * @param[in] a_robot_pose_delta: robot pose delta, sampled directly from controls
      * @param[in] a_sighting_queue: a queue to all landmark sightings
      */
-    void updateFilter(const struct Pose2D& a_robot_pose_mean,
+    void updateFilter(const struct Pose2D& a_robot_pose_delta,
                      std::queue<struct Observation2D>& a_sighting_queue);
 
     /**

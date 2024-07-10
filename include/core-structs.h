@@ -47,6 +47,13 @@ struct Pose2D {
        theta_rad += rhs[2];
        return *this;
     }
+
+    struct Pose2D& operator+=(const struct Pose2D& rhs) {
+       x += rhs.x;
+       y += rhs.y;
+       theta_rad += rhs.theta_rad;
+       return *this;
+    }
 };
 
 /**

@@ -28,7 +28,8 @@ FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr):
                {.x = 0, .y = 0, .theta_rad = 0}, DEFAULT_IMPORTANCE_FACTOR) {
 }
 
-struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
+struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_delta,
+                                     const struct Pose2D& a_pose_prev) {
     Eigen::Matrix3f l_cholesky;
     Eigen::LLT<Eigen::Matrix3f> cholSolver(m_robot->getProcessNoise());
     if (cholSolver.info()==Eigen::Success) {
@@ -44,7 +45,8 @@ struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
     for (auto& it: z){
         it = MathUtil::sampleNormal(0.0f, 1.0f);
     }
-    struct Pose2D ret = a_pose_mean;
+    struct Pose2D ret = a_pose_prev;
+    ret += a_pose_delta;
     ret += l_cholesky * z;
     return ret;
 }
@@ -88,14 +90,14 @@ void FastSLAMPF::reSampleParticles(){
 
 }
 
-void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
+void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_delta,
                          std::queue<struct Observation2D> &a_sighting_queue) {
     while (!a_sighting_queue.empty()){
         int idx = 0;
         for (auto& it: m_particle_set){
-            auto rob_pose_sampled = samplePose(a_robot_pose_mean);
+            auto rob_pose_sampled = samplePose(a_robot_pose_delta);
             m_particle_weights[idx] += it.second->updateParticle(
-                a_sighting_queue.front(), rob_pose_sampled);
+                a_sighting_queue.front(), a_robot_pose_delta);
             idx++;
         }
         a_sighting_queue.pop();

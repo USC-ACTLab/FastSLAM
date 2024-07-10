@@ -79,6 +79,28 @@ PF_RET FastSLAMParticles::updateLMBelief(const struct Observation2D& curr_obs){
     return PF_RET::SUCCESS;
 }
 
+PF_RET FastSLAMParticles::samplePose(const struct Pose2D& a_pose_delta) {
+    Eigen::Matrix3f l_cholesky;
+    Eigen::LLT<Eigen::Matrix3f> cholSolver(m_robot->getProcessNoise());
+    if (cholSolver.info()==Eigen::Success) {
+        // Use cholesky solver
+        l_cholesky = cholSolver.matrixL();
+    } else {
+        // Use eigen solver
+        Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigenSolver(m_robot->getProcessNoise());
+        l_cholesky = eigenSolver.eigenvectors()
+            * eigenSolver.eigenvalues().cwiseSqrt().asDiagonal();
+    }
+    Eigen::Vector3f z = Eigen::Vector3f::Zero();
+    for (auto& it: z){
+        it = MathUtil::sampleNormal(0.0f, 1.0f);
+    }
+    m_robot_pose += a_pose_delta;
+    m_robot_pose += l_cholesky * z;
+
+    return PF_RET::SUCCESS;
+}
+
 #ifdef LM_CLEANUP
 void FastSLAMParticles::cleanUpSightings() {
     int i = 0;
@@ -102,13 +124,13 @@ PF_RET FastSLAMParticles::updatePose(const struct Pose2D& new_pose) {
 }
 
 float FastSLAMParticles::updateParticle(const struct Observation2D& new_obs,
-                                      const struct Pose2D& new_pose) {
+                                      const struct Pose2D& new_pose_delta) {
     if (m_robot == nullptr) {
         std::cout << "No robot manager specified" << std::endl;
         return -1.0;
     }
     int res_code = 0;
-    res_code += static_cast<int>(updatePose(new_pose));
+    res_code += static_cast<int>(samplePose(new_pose_delta));
     matchLandmark(new_obs);
     res_code += static_cast<int>(updateLMBelief(new_obs));
 
