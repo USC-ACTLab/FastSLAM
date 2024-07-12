@@ -62,7 +62,7 @@ struct Point2D MockManager2D::inverseMeas(const struct Pose2D& rob_pose,
     float x = curr_obs.range_m * cosf( curr_obs.bearing_rad + rob_pose.theta_rad );
     float y = curr_obs.range_m * sinf( curr_obs.bearing_rad + rob_pose.theta_rad );
 
-    return {.x = x, .y = y};
+    return {.x = x + rob_pose.x, .y = y + rob_pose.y};
 }
 
 Eigen::Matrix2f MockManager2D::getMeasNoise() const {
