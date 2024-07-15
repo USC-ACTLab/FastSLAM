@@ -153,7 +153,16 @@ TEST_CASE( "Test MockManager Numerical Sim" ) {
 
         SECTION( "Position 1: Landmark behind robot" ){
             struct Point2D expected = {.x = -1, .y = 0};
-            auto res = test_manager->inverseMeas({.x = 0, .y = 0}, {.range_m = 1, .bearing_rad = M_PI});
+            auto res = test_manager->inverseMeas({.x = 0, .y = 0, .theta_rad = 0}, {.range_m = 1, .bearing_rad = M_PI});
+            REQUIRE_THAT( res.x, Catch::Matchers::WithinRel(expected.x, 0.001f) ||
+                          Catch::Matchers::WithinAbs(expected.x, 0.00001f) );
+            REQUIRE_THAT( res.y, Catch::Matchers::WithinRel(expected.y, 0.001f) ||
+                          Catch::Matchers::WithinAbs(expected.y, 0.00001f) );
+        }
+
+        SECTION( "Position 2: Landmark next to robot, Robot at non-zero" ){
+            struct Point2D expected = {.x = 1, .y = 1};
+            auto res = test_manager->inverseMeas({.x = 1, .y = 0, .theta_rad = 0}, {.range_m = 1, .bearing_rad = M_PI/2});
             REQUIRE_THAT( res.x, Catch::Matchers::WithinRel(expected.x, 0.001f) ||
                           Catch::Matchers::WithinAbs(expected.x, 0.00001f) );
             REQUIRE_THAT( res.y, Catch::Matchers::WithinRel(expected.y, 0.001f) ||

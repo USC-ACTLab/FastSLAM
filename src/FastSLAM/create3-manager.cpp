@@ -26,7 +26,7 @@ struct Point2D Create3Manager::inverseMeas(const struct Pose2D& rob_pose, const 
     float x = curr_obs.range_m * cosf( curr_obs.bearing_rad + rob_pose.theta_rad );
     float y = curr_obs.range_m * sinf( curr_obs.bearing_rad + rob_pose.theta_rad );
 
-    return {.x = x, .y = y};
+    return {.x = x + rob_pose.x, .y = y + rob_pose.y};
 }
 
 struct Observation2D Create3Manager::predictMeas(const struct Point2D& mu_prev) {
