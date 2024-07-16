@@ -81,17 +81,7 @@ private:
     */
    struct Observation2D m_curr_obs;
 
-   /**
-    * @brief measurement jacobian helper function, takes the Jacobian of g(s, mu)
-    */
-   Eigen::Matrix2f measJacobian() const;
 
-   /**
-    * @brief function to calculate Kalman Filter gain for measurement correction
-    *
-    * @return A 2x2 matrix of Kalman Filter gain
-    */
-   Eigen::Matrix2f calcKalmanGain() const;
 
    /**
     * @brief calculate measurement covariance, store result in member variable
@@ -153,6 +143,21 @@ public:
     * @brief update internal copy of current robot observations
     * @details this ensures timing in constrast to the sampling approach. Must be called first every cycle
     */
-    void updateObservation(const struct Observation2D& new_obs);
+    void updateObservation(const struct Observation2D& new_obs) ;
+
+
+   /**
+   * @brief measurement jacobian helper function, takes the Jacobian of g(s, mu)
+   */
+   Eigen::Matrix2f measJacobian() const;
+
+
+      /**
+    * @brief function to calculate Kalman Filter gain for measurement correction
+    *
+    * @return A 2x2 matrix of Kalman Filter gain
+    */
+   Eigen::Matrix2f calcKalmanGain() const;
+
 
 };
