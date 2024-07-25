@@ -171,3 +171,91 @@ TEST_CASE( "Test CDF table generation" ){
       REQUIRE( cdf.empty() );
    }
 }
+
+TEST_CASE( "Test wrap around angle" ){
+
+   struct Pose2D pose = {1, 0, 0};
+
+   SECTION( "positive overflow with sum operator" ){
+      Eigen::Vector3f del(0.0f, 0.0f, 3.0f * M_PI_2);
+      pose += del;
+      REQUIRE_THAT(pose.theta_rad, Catch::Matchers::WithinRel((-M_PI_2), 0.001));
+   }       
+
+   SECTION( "negative overflow with sum operator" ){
+      Eigen::Vector3f del(0.0f, 0.0f, -4.0f * M_PI_2);
+      pose += del;
+      REQUIRE_THAT(pose.theta_rad, Catch::Matchers::WithinAbs(-0.0, 0.001));
+   }  
+
+   SECTION( "theta is slightly over pi with sum operator" ){
+      Eigen::Vector3f del(0.0f, 0.0f, M_PI + 0.1);
+      pose += del;
+      REQUIRE_THAT(pose.theta_rad, Catch::Matchers::WithinRel(-M_PI + 0.1, 0.001));
+   }  
+
+   SECTION( "theta is slightly under pi with sum operator" ){
+      Eigen::Vector3f del(0.0f, 0.0f, M_PI - 0.1);
+      pose += del;
+      REQUIRE_THAT(pose.theta_rad, Catch::Matchers::WithinRel(M_PI - 0.1, 0.001));
+   }  
+
+   SECTION( "sum theta is -pi sum operator" ){
+      struct Pose2D add = {0.0f, 0.0f, -M_PI_2};
+      Eigen::Vector3f delta(0.0f, 0.0f, -M_PI_2);
+      add += delta;
+      REQUIRE_THAT(add.theta_rad, Catch::Matchers::WithinRel(M_PI, 0.001));
+   }   
+
+   SECTION( "sum theta is pi sum operator" ){
+      struct Pose2D add = {0.0f, 0.0f, M_PI_2};
+      Eigen::Vector3f delta(0.0f, 0.0f, M_PI_2);
+      add += delta;
+      REQUIRE_THAT(add.theta_rad, Catch::Matchers::WithinRel(-M_PI, 0.001));
+   }   
+
+   SECTION( "positive overflow with copy assignment operator" ){
+     pose.theta_rad = 3.0 * M_PI;
+     struct Pose2D copied = {0, 0, 0};
+     copied = pose;
+     REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel((-M_PI), 0.001));
+   } 
+   
+   SECTION( "negative overflow with copy assignment operator" ){
+     pose.theta_rad = -5.0f * M_PI_2;
+     struct Pose2D copied;
+     copied = pose;
+     REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel(-M_PI_2, 0.001));
+   } 
+
+   SECTION( "theta is slightly over pi with sum operator" ){
+     pose.theta_rad = M_PI + 0.01;
+     struct Pose2D copied;
+     copied = pose;
+     REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel(-M_PI + 0.01, 0.001));
+   } 
+   
+   SECTION( "theta is slightly under -pi with sum operator" ){
+     pose.theta_rad = -M_PI - 0.001;
+     struct Pose2D copied;
+     copied = pose;
+     REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel(M_PI - 0.001, 0.001));
+   } 
+
+   SECTION( "copy asssignment with theta is pi" ){
+      pose.theta_rad = M_PI;
+      struct Pose2D copied = {0, 0, 0.0};
+      copied = pose;
+      REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel(-M_PI, 0.001));
+   }
+
+   SECTION( "copy asssignment with theta is -pi" ){
+      pose.theta_rad = -M_PI;
+      struct Pose2D copied = {0, 0, 0.0};
+      copied = pose;
+      REQUIRE_THAT(copied.theta_rad, Catch::Matchers::WithinRel(M_PI, 0.001));
+   }
+
+}
+
+
