@@ -1,5 +1,5 @@
 %% Verify EKF one step update
-% by Emma Slaught & Will Wu
+% by Emma Slaght & Will Wu
 clear; clc;
 
 %% set up test
