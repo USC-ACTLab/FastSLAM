@@ -61,7 +61,7 @@ struct Pose2D {
             angle_rad -= 2.0 * M_PI;
         }
 
-        if (std::fabs(angle_rad - M_PI) < 1e-4 {
+        if (std::fabs(angle_rad - M_PI) < 1e-4) {
             angle_rad = M_PI;
         } else if (std::fabs(angle_rad + M_PI) < 1e-4f) {
             angle_rad = -M_PI;
