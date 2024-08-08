@@ -108,6 +108,12 @@ public:
      */
     float updateParticle(const struct Observation2D& new_obs,
                          const struct Pose2D& new_pose);
+
+     /**
+     * @brief finds the coordinates of all the landmarks assosciated with a particle
+     * @return queue of all the landmark coordinates 
+     */
+    std::queue<struct Point2D> getLandmarkCoordinates();
 };
 
 class FastSLAMPF {
@@ -202,4 +208,11 @@ public:
      * @param[in] sample: randomly-generated number in range of the cdf table
      */
     int drawWithReplacement(const std::vector<float>& cdf_vec, float sample);
+
+     /**
+     * @brief samples one particle, based on weights, and estimates the landmarks of each EKF
+     * assosciated with the particle
+     * @return queue of 2DPoints, corresponding to the landmarks associated with that particle
+     */
+    std::queue<struct Point2D> sampleLandmarks();
 };
