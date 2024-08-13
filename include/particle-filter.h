@@ -8,6 +8,7 @@
 #include "EKF.h"
 #include <unordered_map>
 #include <queue>
+#include <vector>
 
 enum class PF_RET{ SUCCESS = 0, EMPTY_ROBOT_MANAGER = -1, MATRIX_INVERSION_ERROR = -2, UPDATE_ERROR = -3 };
 constexpr unsigned int DEFAULT_NUM_PARTICLE = 50;
@@ -212,7 +213,7 @@ public:
      /**
      * @brief samples one particle, based on weights, and estimates the landmarks of each EKF
      * assosciated with the particle
-     * @return queue of 2DPoints, corresponding to the landmarks associated with that particle
+     * @return vector of 2DPoints, corresponding to the landmarks associated with that particle
      */
-    std::queue<struct Point2D> sampleLandmarks();
+    std::vector<struct Point2D> sampleLandmarks();
 };

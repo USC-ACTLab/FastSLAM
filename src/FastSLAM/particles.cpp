@@ -121,10 +121,10 @@ float FastSLAMParticles::updateParticle(const struct Observation2D& new_obs,
         static_cast<float>(PF_RET::UPDATE_ERROR);
 }
 
-std::queue<struct Point2D> FastSLAMParticles::getLandmarkCoordinates(){
-    std::queue<struct Point2D> landmarks;
-    for(int i = 0; i<this->getNumLandMark(); i++){
-        landmarks.push(m_lmekf_bank[i].first->getLMEst());
+std::vector<struct Point2D> FastSLAMParticles::getLandmarkCoordinates(){
+    std::vector<struct Point2D> landmarks;
+    for(auto ekf : m_lmekf_bank){
+        landmarks.push_back(ekf.first->getLMEst());
     }
     return landmarks;
 }

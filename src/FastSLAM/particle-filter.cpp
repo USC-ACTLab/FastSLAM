@@ -103,7 +103,7 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
     reSampleParticles();
 }
 
-std::queue<struct Point2D> FastSLAMPF::sampleLandmarks(){
+std::vector<struct Point2D> FastSLAMPF::sampleLandmarks(){
     std::vector<float> cdf_table;
     float total_weight = MathUtil::genCDF(m_particle_weights, cdf_table);
     float sampled_weight = MathUtil::sampleUniform(0.0, total_weight);
