@@ -114,7 +114,7 @@ public:
      * @brief finds the coordinates of all the landmarks assosciated with a particle
      * @return queue of all the landmark coordinates 
      */
-    std::queue<struct Point2D> getLandmarkCoordinates();
+    const std::vector<struct Point2D> getLandmarkCoordinates() const;
 };
 
 class FastSLAMPF {
@@ -215,5 +215,5 @@ public:
      * assosciated with the particle
      * @return vector of 2DPoints, corresponding to the landmarks associated with that particle
      */
-    std::vector<struct Point2D> sampleLandmarks();
+    const std::vector<struct Point2D> sampleLandmarks() const;
 };
