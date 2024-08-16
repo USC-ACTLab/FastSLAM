@@ -49,7 +49,7 @@ struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
     return ret;
 }
 
-int FastSLAMPF::drawWithReplacement(const std::vector<float>& cdf_vec, float sample){
+int FastSLAMPF::drawWithReplacement(const std::vector<float>& cdf_vec, float sample) const{
     int start = 0;
     int end = cdf_vec.size()-1;
     if (sample < 0 || sample > cdf_vec[end]) return -1;
@@ -103,10 +103,10 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
     reSampleParticles();
 }
 
-const std::vector<struct Point2D> FastSLAMPF::sampleLandmarks() const{
+const std::vector<struct Point2D> FastSLAMPF::sampleLandmarks() const {
     std::vector<float> cdf_table;
     float total_weight = MathUtil::genCDF(m_particle_weights, cdf_table);
     float sampled_weight = MathUtil::sampleUniform(0.0, total_weight);
-    int sampled_idx = drawWithReplacement(cdf_table, sampled_weight);
-    return m_particle_set[sampled_idx]->getLandmarkCoordinates();  
+    int sampled_idx = drawWithReplacement(cdf_table, sampled_weight); 
+    return (m_particle_set.at(sampled_idx))->getLandmarkCoordinates();  
 }

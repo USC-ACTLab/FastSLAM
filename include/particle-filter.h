@@ -208,7 +208,7 @@ public:
      * @param[in] cdf_vec: cdf vector containing cumulative sum of all weights
      * @param[in] sample: randomly-generated number in range of the cdf table
      */
-    int drawWithReplacement(const std::vector<float>& cdf_vec, float sample);
+    int drawWithReplacement(const std::vector<float>& cdf_vec, float sample)const;
 
      /**
      * @brief samples one particle, based on weights, and estimates the landmarks of each EKF
