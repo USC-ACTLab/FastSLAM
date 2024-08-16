@@ -108,7 +108,5 @@ const std::vector<struct Point2D> FastSLAMPF::sampleLandmarks() const{
     float total_weight = MathUtil::genCDF(m_particle_weights, cdf_table);
     float sampled_weight = MathUtil::sampleUniform(0.0, total_weight);
     int sampled_idx = drawWithReplacement(cdf_table, sampled_weight);
-    std::unique_ptr<FastSLAMParticles> particle_drew =
-            std::make_unique<FastSLAMParticles>(*m_particle_set[sampled_idx]);
-    return particle_drew->getLandmarkCoordinates();  
+    return m_particle_set[sampled_idx]->getLandmarkCoordinates();  
 }
