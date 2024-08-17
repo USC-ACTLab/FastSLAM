@@ -8,6 +8,7 @@
 #include "EKF.h"
 #include <unordered_map>
 #include <queue>
+#include <vector>
 
 enum class PF_RET{ SUCCESS = 0, EMPTY_ROBOT_MANAGER = -1, MATRIX_INVERSION_ERROR = -2, UPDATE_ERROR = -3 };
 constexpr unsigned int DEFAULT_NUM_PARTICLE = 50;
@@ -108,6 +109,12 @@ public:
      */
     float updateParticle(const struct Observation2D& new_obs,
                          const struct Pose2D& new_pose);
+
+     /**
+     * @brief finds the coordinates of all the landmarks assosciated with a particle
+     * @return queue of all the landmark coordinates 
+     */
+    const std::vector<struct Point2D> getLandmarkCoordinates() const;
 };
 
 class FastSLAMPF {
@@ -201,5 +208,12 @@ public:
      * @param[in] cdf_vec: cdf vector containing cumulative sum of all weights
      * @param[in] sample: randomly-generated number in range of the cdf table
      */
-    int drawWithReplacement(const std::vector<float>& cdf_vec, float sample);
+    int drawWithReplacement(const std::vector<float>& cdf_vec, float sample)const;
+
+     /**
+     * @brief samples one particle, based on weights, and estimates the landmarks of each EKF
+     * assosciated with the particle
+     * @return vector of 2DPoints, corresponding to the landmarks associated with that particle
+     */
+    const std::vector<struct Point2D> sampleLandmarks() const;
 };

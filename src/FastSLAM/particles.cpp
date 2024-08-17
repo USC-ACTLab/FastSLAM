@@ -120,3 +120,11 @@ float FastSLAMParticles::updateParticle(const struct Observation2D& new_obs,
         m_lmekf_bank[m_data_label].first->calcCPD() :
         static_cast<float>(PF_RET::UPDATE_ERROR);
 }
+
+const std::vector<struct Point2D> FastSLAMParticles::getLandmarkCoordinates() const{
+    std::vector<struct Point2D> landmarks;
+    for(const auto& ekf : m_lmekf_bank){
+        landmarks.push_back(ekf.first->getLMEst());
+    }
+    return landmarks;
+}
