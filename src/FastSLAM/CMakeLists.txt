@@ -16,6 +16,9 @@ target_include_directories(FastSLAMLib PUBLIC
 
 target_link_libraries(FastSLAMLib Eigen3::Eigen)
 
+add_executable(fastslam fastslam.cpp)
+target_link_libraries(fastslam FastSLAMLib)
+
 if(BUILD_TESTS)
   add_executable(test_MathUtil math-util_test.cpp)
   target_link_libraries(test_MathUtil
