@@ -1,5 +1,6 @@
 #include "particle-filter.h"
 #include "robot-manager.h"
+#include <glog/logging.h>
 #include <stdio.h>
 #include <memory.h>
 
@@ -11,7 +12,8 @@ static const float theta_var = 0.0000125f;
 static const struct Observation2D obs = {.range_m = 0.623143, 
                                         .bearing_rad = 0.987187};
 
-int main(){
+int main(int argc, char* argv[]){
+    google::InitGoogleLogging(argv[0]);
 
     const struct Pose2D init_pose = {.x = 0, .y = 0, .theta_rad = 0};
     const struct VelocityCommand2D init_cmd {.vx_mps = 0, .wz_radps = 0};
@@ -20,7 +22,7 @@ int main(){
     std::shared_ptr<Create3Manager> m_robot_manager = std::make_shared<Create3Manager>(init_pose, init_cmd, 
         Eigen::Matrix2f::Zero(), 3.0f, rob_process_noise);
     std::unique_ptr<FastSLAMPF> m_fastslam_filter = std::make_unique<FastSLAMPF>(
-        std::static_pointer_cast<RobotManager2D>(m_robot_manager));
+        std::static_pointer_cast<RobotManager2D>(m_robot_manager), 10, init_pose, 0.5);
 
     std::queue<Observation2D> lidar_landmarks;
     lidar_landmarks.push(obs);

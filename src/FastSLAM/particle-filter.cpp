@@ -4,13 +4,14 @@
  */
 
 #include "particle-filter.h"
+#include "glog/logging.h"
 
 FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr,
                        unsigned int num_particles,
                        const struct Pose2D& starting_pose,
                        const float& lm_importance_factor):
     m_robot(rob_ptr),
-    m_num_particles(DEFAULT_NUM_PARTICLE){
+    m_num_particles(num_particles){
 
     for (int i = 0; i < m_num_particles; i++) {
         std::unique_ptr<FastSLAMParticles> new_particle = std::make_unique<FastSLAMParticles>
@@ -46,6 +47,7 @@ struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
     }
     struct Pose2D ret = a_pose_mean;
     ret += l_cholesky * z;
+    LOG(INFO) << "Return pose: x " << ret.x  << "; y " << ret.y << "; theta " << ret.theta_rad;
     return ret;
 }
 
@@ -93,6 +95,7 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
     while (!a_sighting_queue.empty()){
         int idx = 0;
         for (auto& it: m_particle_set){
+            LOG(INFO) << "Resampling particle #" << it.first;
             auto rob_pose_sampled = samplePose(a_robot_pose_mean);
             m_particle_weights[idx] += it.second->updateParticle(
                 a_sighting_queue.front(), rob_pose_sampled);

@@ -1,5 +1,5 @@
 # project language setup
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -18,6 +18,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # library configs
 find_package (Eigen3 3.4 REQUIRED NO_MODULE)
+find_package (glog 0.4.0 REQUIRED)
 
 # testing set up
 option(BUILD_TESTS "Build Tests" OFF)

@@ -4,6 +4,7 @@
  */
 
 #include "particle-filter.h"
+#include "glog/logging.h"
 
 FastSLAMParticles::FastSLAMParticles(const FastSLAMParticles& part):
     m_importance_factor(part.m_importance_factor),
@@ -109,8 +110,10 @@ float FastSLAMParticles::updateParticle(const struct Observation2D& new_obs,
     }
     int res_code = 0;
     res_code += static_cast<int>(updatePose(new_pose));
+    LOG(INFO) << "res code after pose update: " << res_code;
     matchLandmark(new_obs);
     res_code += static_cast<int>(updateLMBelief(new_obs));
+    LOG(INFO) << "res code after lm update: " << res_code;
 
 #ifdef LM_CLEANUP
     cleanUpSightings();

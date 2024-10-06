@@ -14,7 +14,9 @@ target_include_directories(FastSLAMLib PUBLIC
                            "${PROJECT_SOURCE_DIR}/include"
 )
 
-target_link_libraries(FastSLAMLib Eigen3::Eigen)
+target_link_libraries(FastSLAMLib 
+                      Eigen3::Eigen
+                      glog::glog)
 
 add_executable(fastslam fastslam.cpp)
 target_link_libraries(fastslam FastSLAMLib)
