@@ -7,6 +7,7 @@
 
 #include <optional>
 #include <Eigen/Dense>
+#include <math.h>
 
 /** A point (position only) in the 2D plane. */
 struct Point2D {
@@ -26,6 +27,7 @@ struct Pose2D {
     float y;           // y-coordinate (scaled in meters)
     float theta_rad;   // heading (radians) wrapped into [-pi, pi]
 
+
     /**
      * @brief overloaded copy assignment operator
      */
@@ -33,7 +35,7 @@ struct Pose2D {
         if (this != &other) {
             this->x = other.x;
             this->y = other.y;
-            this->theta_rad = other.theta_rad;
+            this->theta_rad = wrapAngle(other.theta_rad);
         }
         return *this;
     }
@@ -44,8 +46,28 @@ struct Pose2D {
     struct Pose2D& operator+=(const Eigen::Vector3f& rhs) {
        x += rhs[0];
        y += rhs[1];
-       theta_rad += rhs[2];
+       theta_rad = wrapAngle(theta_rad + rhs[2]);
        return *this;
+    }
+
+    /**
+     * @brief wraps angle in radians into [-pi, pi]
+     */
+    static float wrapAngle( float angle_rad ){
+        while (angle_rad < -M_PI) {
+            angle_rad += 2.0 * M_PI;
+        }
+        while (angle_rad > M_PI) {
+            angle_rad -= 2.0 * M_PI;
+        }
+
+        if (std::fabs(angle_rad - M_PI) < 1e-4) {
+            angle_rad = M_PI;
+        } else if (std::fabs(angle_rad + M_PI) < 1e-4f) {
+            angle_rad = -M_PI;
+        }
+        
+        return angle_rad;
     }
 };
 
