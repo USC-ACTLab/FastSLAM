@@ -78,7 +78,9 @@ void FastSLAMPF::reSampleParticles(){
 
     for (const auto& it: m_particle_set){
         sampled_weight = MathUtil::sampleUniform(0.0, total_weight);
+        LOG(INFO) << "Sampled weight: " << sampled_weight;
         int sampled_idx = drawWithReplacement(cdf_table, sampled_weight);
+        LOG(INFO) << "Sampled idx: " << sampled_idx;
         // leave original particle if sampling goes wrong
         sampled_idx = sampled_idx >= 0 ? sampled_idx : it.first;
         std::unique_ptr<FastSLAMParticles> particle_drew =
@@ -95,10 +97,11 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
     while (!a_sighting_queue.empty()){
         int idx = 0;
         for (auto& it: m_particle_set){
-            LOG(INFO) << "Resampling particle #" << it.first;
+            LOG(INFO) << "Updating particle #" << it.first;
             auto rob_pose_sampled = samplePose(a_robot_pose_mean);
             m_particle_weights[idx] += it.second->updateParticle(
                 a_sighting_queue.front(), rob_pose_sampled);
+            LOG(INFO) << "resulting particle weight: " << m_particle_weights[idx];
             idx++;
         }
         a_sighting_queue.pop();

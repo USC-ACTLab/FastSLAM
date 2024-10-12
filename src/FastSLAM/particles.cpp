@@ -119,6 +119,7 @@ float FastSLAMParticles::updateParticle(const struct Observation2D& new_obs,
     cleanUpSightings();
 #endif //LM_CLEANUP
 
+    LOG(INFO) << "Test result: " << (res_code == static_cast<int>(PF_RET::SUCCESS));
     return res_code == static_cast<int>(PF_RET::SUCCESS) ?
         m_lmekf_bank[m_data_label].first->calcCPD() :
         static_cast<float>(PF_RET::UPDATE_ERROR);

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     std::shared_ptr<Create3Manager> m_robot_manager = std::make_shared<Create3Manager>(init_pose, init_cmd, 
         Eigen::Matrix2f::Zero(), 3.0f, rob_process_noise);
     std::unique_ptr<FastSLAMPF> m_fastslam_filter = std::make_unique<FastSLAMPF>(
-        std::static_pointer_cast<RobotManager2D>(m_robot_manager), 10, init_pose, 0.5);
+        std::static_pointer_cast<RobotManager2D>(m_robot_manager), 2, init_pose, 0.5);
 
     std::queue<Observation2D> lidar_landmarks;
     lidar_landmarks.push(obs);

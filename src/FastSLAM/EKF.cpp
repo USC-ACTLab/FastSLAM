@@ -4,6 +4,7 @@
  */
 
 #include "EKF.h"
+#include "glog/logging.h"
 
 
 LMEKF2D::LMEKF2D() {
@@ -68,6 +69,7 @@ KF_RET LMEKF2D::update() {
 
 float LMEKF2D::calcCPD() {
     if (m_robot == nullptr) {
+        LOG(ERROR) << "Empty robot manager";
         return -1.0f;
     }
 
@@ -77,9 +79,11 @@ float LMEKF2D::calcCPD() {
     }
 
     Eigen::Vector2f residue = m_curr_obs - m_robot->predictMeas(m_mu);
+    LOG(INFO) << "residue: " << residue;
 
     float weight = 1 / sqrtf( (2 * M_PI * m_meas_cov).determinant() );
     weight = weight * expf( -0.5 * residue.transpose() * m_meas_cov.inverse() * residue );
+    LOG(INFO) << "weight: " << weight;
 
     return weight;
 }
