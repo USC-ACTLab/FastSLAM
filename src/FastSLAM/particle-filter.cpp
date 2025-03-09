@@ -33,7 +33,6 @@ FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr):
 struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
     Eigen::Matrix3f l_cholesky;
     Eigen::LLT<Eigen::Matrix3f> cholSolver(m_robot->getProcessNoise());
-    LOG(INFO) << "Robot process noise covariance matrix: \n" << m_robot->getProcessNoise();
     LOG(INFO) << "Using choleksy solver? " << (cholSolver.info() == Eigen::Success);
     if (cholSolver.info()==Eigen::Success) {
         // Use cholesky solver
@@ -48,7 +47,6 @@ struct Pose2D FastSLAMPF::samplePose(const struct Pose2D& a_pose_mean) {
     for (auto& it: z){
         it = MathUtil::sampleNormal(0.0f, 1.0f);
     }
-    LOG(INFO) << "Sampled z is : \n" << z;
     struct Pose2D ret = a_pose_mean;
     ret += l_cholesky * z;
     LOG(INFO) << "Return pose: x " << ret.x  << "; y " << ret.y << "; theta " << ret.theta_rad;
@@ -94,7 +92,6 @@ void FastSLAMPF::reSampleParticles(){
     }
 
     m_particle_set = std::move(aux_set);
-
 }
 
 void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,

@@ -34,3 +34,5 @@ endif()
 
 # source configuration
 add_subdirectory(src)
+
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/logs)

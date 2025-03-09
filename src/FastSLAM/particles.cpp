@@ -12,7 +12,7 @@ FastSLAMParticles::FastSLAMParticles(const FastSLAMParticles& part):
     m_data_label(part.m_data_label),
     m_robot(part.m_robot),
     m_curr_max_wn(part.m_curr_max_wn){
-    for (const auto& it: m_lmekf_bank){
+    for (const auto& it: part.m_lmekf_bank){
         m_lmekf_bank.push_back(std::make_pair(std::make_unique<LMEKF2D>(*it.first.get()), it.second));
     }
 }
@@ -36,7 +36,7 @@ int FastSLAMParticles::matchLandmark(const struct Observation2D& curr_obs) {
 
     m_data_label = landmark_id;
     m_curr_max_wn = max_wn;
-    LOG(INFO) << "Landmark id is: " << landmark_id;
+    LOG(INFO) << "Proposed matching landmark id is: " << landmark_id;
     LOG(INFO) << "Current max w_n is: " << m_curr_max_wn;
 
     return landmark_id;

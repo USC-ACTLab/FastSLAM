@@ -85,6 +85,8 @@ float LMEKF2D::calcCPD() {
     LOG(INFO) << "residue: " << residue;
 
     float weight = 1 / sqrtf( (2 * M_PI * m_meas_cov).determinant() );
+    LOG(INFO) << "weight determinant: " << weight;
+    LOG(INFO) << "weight exponent: " <<  -0.5 * residue.transpose() * m_meas_cov.inverse() * residue;
     weight = weight * expf( -0.5 * residue.transpose() * m_meas_cov.inverse() * residue );
     LOG(INFO) << "weight: " << weight;
 
