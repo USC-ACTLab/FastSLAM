@@ -1,3 +1,4 @@
+add_compile_options(-Wall -Wextra -Wpedantic)
 add_library(FastSLAMLib
    math-util.cpp
    EKF.cpp

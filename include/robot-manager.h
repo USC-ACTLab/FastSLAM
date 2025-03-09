@@ -71,8 +71,8 @@ protected:
                    struct VelocityCommand2D init_cmd,
                    Eigen::Matrix2f meas_noise, float robot_pr,
                    Eigen::Matrix3f process_noise) : m_curr_pose(init_pose),
-        m_curr_command(init_cmd), m_meas_noise(meas_noise), m_perceptual_range(robot_pr),
-        m_process_noise(process_noise){
+        m_curr_command(init_cmd), m_meas_noise(meas_noise), m_process_noise(process_noise),
+        m_perceptual_range(robot_pr){
         m_curr_obs = { .range_m = 0, .bearing_rad = 0 };
     }
 

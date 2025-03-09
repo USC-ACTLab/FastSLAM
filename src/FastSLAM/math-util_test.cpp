@@ -141,7 +141,7 @@ TEST_CASE( "Test CDF table generation" ){
 
    SECTION( "test vector of float" ){
       std::vector<float> pdf {0.1, 0.3, 0.4, 0.2};
-      std::vector<float> cdf_target {0.1, 0.4, 0.8, 1};
+      std::vector<float> cdf_target {0.0, 0.1, 0.4, 0.8, 1};
       std::vector<float> cdf;
       MathUtil::genCDF(pdf, cdf);
       int idx = 0;
@@ -154,7 +154,7 @@ TEST_CASE( "Test CDF table generation" ){
 
    SECTION( "test vector of int" ){
       std::vector<int> pdf {0, 1, 2, 3};
-      std::vector<int> cdf_target {0, 1, 3, 6};
+      std::vector<int> cdf_target {0, 0, 1, 3, 6};
       std::vector<int> cdf;
       MathUtil::genCDF(pdf, cdf);
       int idx = 0;

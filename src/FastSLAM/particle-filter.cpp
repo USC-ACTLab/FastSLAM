@@ -19,8 +19,8 @@ FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr,
         auto particle_pair = std::make_pair(i, std::move(new_particle));
         m_particle_set.insert(std::move(particle_pair));
 
-        m_particle_weights.push_back(0.0f);
-        // m_particle_weights.push_back(1.0f / static_cast<float>(m_num_particles));
+        // m_particle_weights.push_back(0.0f);
+        m_particle_weights.push_back(1.0f / static_cast<float>(m_num_particles));
     }
 }
 
@@ -107,7 +107,7 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
             const int particle_idx = particle.first;
             LOG(INFO) << "Updating particle #" << particle_idx;
             // TODO: add better error handling here
-            m_particle_weights[particle_idx] += particle.second->updateParticle(
+            m_particle_weights[particle_idx] *= particle.second->updateParticle(
                 a_sighting_queue.front());
             LOG(INFO) << "resulting particle weight: " << m_particle_weights[particle_idx];
         }

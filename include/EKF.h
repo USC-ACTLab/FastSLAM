@@ -17,7 +17,6 @@ enum class KF_RET { SUCCESS = 0, EMPTY_ROBOT_MANAGER = -1, MATRIX_INVERSION_ERRO
  * @brief: Abstract EKF class that offers two core EKF functions
  */
 class EKFBase {
-
 public:
 
    /**
@@ -35,7 +34,6 @@ public:
 };
 
 class LandMarkEKF : public EKFBase {
-
 public:
 
    /**
@@ -49,45 +47,9 @@ public:
     * @brief virtual desturctor, necessary for accessing derived class through base class pointer
     */
    virtual ~LandMarkEKF() { };
-
 };
 
 class LMEKF2D final: public EKFBase {
-
-private:
-
-   /**
-    * @brief 2D landmark coordinate estimate
-    */
-   struct Point2D m_mu;
-
-   /**
-    * @brief landmark estimate covariance matrix
-    */
-   Eigen::Matrix2f m_sigma;
-
-   /**
-    * @brief shared pointer to the robot manager instance, used to access measurement models
-    */
-   std::shared_ptr<RobotManager2D> m_robot;
-
-   /**
-    * @brief measurement covariance matrix, used for correspondence weight and K-gain calculation
-    */
-   Eigen::Matrix2f m_meas_cov;
-
-   /**
-    * @brief local copy of current robot observation
-    */
-   struct Observation2D m_curr_obs;
-
-
-
-   /**
-    * @brief calculate measurement covariance, store result in member variable
-    */
-   void calcMeasCov();
-
 public:
 
    /**
@@ -159,5 +121,35 @@ public:
     */
    Eigen::Matrix2f calcKalmanGain() const;
 
+private:
 
+   /**
+    * @brief 2D landmark coordinate estimate
+    */
+   struct Point2D m_mu;
+
+   /**
+    * @brief landmark estimate covariance matrix
+    */
+   Eigen::Matrix2f m_sigma;
+
+   /**
+    * @brief shared pointer to the robot manager instance, used to access measurement models
+    */
+   std::shared_ptr<RobotManager2D> m_robot;
+
+   /**
+    * @brief measurement covariance matrix, used for correspondence weight and K-gain calculation
+    */
+   Eigen::Matrix2f m_meas_cov;
+
+   /**
+    * @brief local copy of current robot observation
+    */
+   struct Observation2D m_curr_obs;
+
+   /**
+    * @brief calculate measurement covariance, store result in member variable
+    */
+   void calcMeasCov();
 };

@@ -32,8 +32,7 @@ TEST_CASE( "Default Particle" ){
     }
 
     SECTION( "Test update landmark" ){
-        float res = test_particle->updateParticle({.range_m = 1, .bearing_rad = 0},
-                                      {.x = 0, .y = 1, .theta_rad = 0});
+        float res = test_particle->updateParticle({.range_m = 1, .bearing_rad = 0});
         REQUIRE(res != static_cast<float>(PF_RET::UPDATE_ERROR));
         REQUIRE(test_particle->getNumLandMark() == 1);
     }

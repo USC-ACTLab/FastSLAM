@@ -84,6 +84,7 @@ float LMEKF2D::calcCPD() {
     Eigen::Vector2f residue = m_curr_obs - m_robot->predictMeas(m_mu);
     LOG(INFO) << "residue: " << residue;
 
+    LOG(INFO) << "Measurement Covariant:\n " << m_meas_cov;
     float weight = 1 / sqrtf( (2 * M_PI * m_meas_cov).determinant() );
     LOG(INFO) << "weight determinant: " << weight;
     LOG(INFO) << "weight exponent: " <<  -0.5 * residue.transpose() * m_meas_cov.inverse() * residue;

@@ -14,68 +14,12 @@ enum class PF_RET{ SUCCESS = 0, EMPTY_ROBOT_MANAGER = -1, MATRIX_INVERSION_ERROR
 constexpr unsigned int DEFAULT_NUM_PARTICLE = 50;
 constexpr float DEFAULT_IMPORTANCE_FACTOR = 0.5;
 
+/**
+ * @brief Particle definition in particle filter
+ * @details each particle has a pose, a data label, and EKFs that holds beliefs over landmarks
+ */
 class FastSLAMParticles {
-
-private:
-    /**
-     * @brief starting importance factor for determining new lm sightings
-     */
-    float m_importance_factor;
-
-    /**
-     * @brief local copy of the current robot pose, used to ensure timing
-     */
-    Pose2D m_robot_pose;
-
-    /**
-     * @brief current particle data association label
-     * @details used to mark current measurement association
-     */
-    int m_data_label;
-
-    /**
-     * @brief importance factor of current observation to landmark
-     */
-     float m_curr_max_wn;
-
-    /**
-     * @brief collection of all landmark EKFs and their
-     */
-    std::vector<std::pair<std::unique_ptr<LMEKF2D>, int>> m_lmekf_bank;
-
-    /**
-     * @brief shared ptr to robot manager instance,
-     * needed to instantiate new KFs
-     */
-     std::shared_ptr<RobotManager2D> m_robot;
-
-    /**
-     * @brief get landmark data association label from EKFs given a measurement
-     * @details queries EKF for maximum likelihood of correspondence
-     *
-     * @param[in] curr_obs: current robot observation
-     * @return data association index
-     */
-    int matchLandmark(const struct Observation2D& curr_obs);
-
-    /**
-     * @brief update specific landmark belief given new measurement
-     *
-     * @param[in] curr_obs: current robot observation
-     */
-    PF_RET updateLMBelief(const struct Observation2D& curr_obs);
-
-
-#ifdef LM_CLEANUP
-    /**
-     * @brief clean up dubious features by keeping track of sightings
-     * @details keep tracks of landmark sightings using the sightings count
-     */
-     void cleanUpSightings();
-#endif
-
 public:
-
     FastSLAMParticles() = delete;
 
     /**
@@ -127,46 +71,67 @@ public:
      * @return const reference to current max importance factor
      */
     const float& getParticleWeight() const { return m_curr_max_wn; }
-};
 
-class FastSLAMPF {
 private:
 
     /**
-     * @brief key-value pairs of index and particles
-     */
-    std::unordered_map<int, std::unique_ptr<FastSLAMParticles>> m_particle_set;
-
-    /**
-     * @brief importance factors associated with particles
-     */
-    std::vector<float> m_particle_weights;
-
-    /**
-     * @brief point to robot manager
-     */
-    std::shared_ptr<RobotManager2D> m_robot;
-
-    /**
-     * @brief number of particles in the filter
-     */
-    unsigned int m_num_particles;
-
-    /**
-     * @brief sample robot pose; this function is probabilistic
-     * @details credit: https://stackoverflow.com/questions/6142576
-     * /sample-from-multivariate-normal-gaussian-distribution-in-c
+     * @brief get landmark data association label from EKFs given a measurement
+     * @details queries EKF for maximum likelihood of correspondence
      *
-     * @param[in] a_pose_mean: collected mean pose from sensor
-     * @return a 2D pose sampled from the robot's motion distribution
+     * @param[in] curr_obs: current robot observation
+     * @return data association index
      */
-    struct Pose2D samplePose(const struct Pose2D& a_pose_mean);
+    int matchLandmark(const struct Observation2D& curr_obs);
 
     /**
-     * @brief resample particles with replacement based on the weights
+     * @brief update specific landmark belief given new measurement
+     *
+     * @param[in] curr_obs: current robot observation
      */
-    void reSampleParticles();
+    PF_RET updateLMBelief(const struct Observation2D& curr_obs);
 
+
+#ifdef LM_CLEANUP
+    /**
+     * @brief clean up dubious features by keeping track of sightings
+     * @details keep tracks of landmark sightings using the sightings count
+     */
+     void cleanUpSightings();
+#endif
+    /**
+     * @brief starting importance factor for determining new lm sightings
+     */
+    float m_importance_factor;
+
+    /**
+     * @brief local copy of the current robot pose, used to ensure timing
+     */
+    Pose2D m_robot_pose;
+
+    /**
+     * @brief current particle data association label
+     * @details used to mark current measurement association
+     */
+    int m_data_label;
+
+    /**
+     * @brief importance factor of current observation to landmark
+     */
+     float m_curr_max_wn;
+
+    /**
+     * @brief collection of all landmark EKFs and their
+     */
+    std::vector<std::pair<std::unique_ptr<LMEKF2D>, int>> m_lmekf_bank;
+
+    /**
+     * @brief shared ptr to robot manager instance,
+     * needed to instantiate new KFs
+     */
+     std::shared_ptr<RobotManager2D> m_robot;
+};
+
+class FastSLAMPF {
 public:
 
     FastSLAMPF() = delete;
@@ -228,4 +193,41 @@ public:
      * @return vector of 2DPoints, corresponding to the landmarks associated with that particle
      */
     const std::vector<struct Point2D> sampleLandmarks() const;
+
+private:
+
+    /**
+     * @brief key-value pairs of index and particles
+     */
+    std::unordered_map<int, std::unique_ptr<FastSLAMParticles>> m_particle_set;
+
+    /**
+     * @brief importance factors associated with particles
+     */
+    std::vector<float> m_particle_weights;
+
+    /**
+     * @brief point to robot manager
+     */
+    std::shared_ptr<RobotManager2D> m_robot;
+
+    /**
+     * @brief number of particles in the filter
+     */
+    unsigned int m_num_particles;
+
+    /**
+     * @brief sample robot pose; this function is probabilistic
+     * @details credit: https://stackoverflow.com/questions/6142576
+     * /sample-from-multivariate-normal-gaussian-distribution-in-c
+     *
+     * @param[in] a_pose_mean: collected mean pose from sensor
+     * @return a 2D pose sampled from the robot's motion distribution
+     */
+    struct Pose2D samplePose(const struct Pose2D& a_pose_mean);
+
+    /**
+     * @brief resample particles with replacement based on the weights
+     */
+    void reSampleParticles();
 };
