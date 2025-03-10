@@ -29,7 +29,7 @@ public:
     explicit FastSLAMParticles(float p_0, const struct Pose2D& starting_pose,
                                std::shared_ptr<RobotManager2D> rob_mgr):
     m_importance_factor(p_0), m_robot_pose(starting_pose), m_robot(rob_mgr){
-        m_data_label = -1;
+        m_data_label = 0;
         m_curr_max_wn = 0.0f;
     }
 

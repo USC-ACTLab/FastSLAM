@@ -9,7 +9,7 @@
 
 LMEKF2D::LMEKF2D() {
    m_mu = { .x  = 0 , .y = 0 };
-   m_sigma = Eigen::Matrix2f::Zero();
+   m_sigma = Eigen::Matrix2f::Identity();
    m_curr_obs = { .range_m = 0, .bearing_rad = 0, .landmarkID = std::nullopt};
    m_robot = nullptr;
    m_meas_cov = Eigen::Matrix2f::Zero();
@@ -59,10 +59,8 @@ KF_RET LMEKF2D::update() {
     } else {
         Eigen::Matrix2f G_n = this->measJacobian();
         Eigen::Matrix2f K = this->calcKalmanGain();
-
         m_mu += K * ( m_curr_obs - m_robot->predictMeas(m_mu) );
-        
-        m_sigma = ( Eigen::Matrix2f::Identity() - K * G_n.transpose() ) * m_sigma;
+        m_sigma = ( Eigen::Matrix2f::Identity() - (K * G_n.transpose()) ) * m_sigma;
     }
 
     return KF_RET::SUCCESS;
@@ -73,9 +71,8 @@ float LMEKF2D::calcCPD() {
         LOG(ERROR) << "Empty robot manager";
         return -1.0f;
     }
-
-    LOG(INFO) << "Calculating CPD";
     this->calcMeasCov();
+    LOG(INFO) << "Measurement covariance:\n " << m_meas_cov;
     if (m_meas_cov.determinant() == 0) {
         LOG(WARNING) << "Measurement covariance doesn't have full rank";
         return -1.0f;
@@ -84,10 +81,7 @@ float LMEKF2D::calcCPD() {
     Eigen::Vector2f residue = m_curr_obs - m_robot->predictMeas(m_mu);
     LOG(INFO) << "residue: " << residue;
 
-    LOG(INFO) << "Measurement Covariant:\n " << m_meas_cov;
-    float weight = 1 / sqrtf( (2 * M_PI * m_meas_cov).determinant() );
-    LOG(INFO) << "weight determinant: " << weight;
-    LOG(INFO) << "weight exponent: " <<  -0.5 * residue.transpose() * m_meas_cov.inverse() * residue;
+    float weight = sqrtf(2 * M_PI * m_meas_cov.determinant());
     weight = weight * expf( -0.5 * residue.transpose() * m_meas_cov.inverse() * residue );
     LOG(INFO) << "weight: " << weight;
 

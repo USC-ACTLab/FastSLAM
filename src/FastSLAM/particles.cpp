@@ -120,8 +120,8 @@ const float FastSLAMParticles::updateParticle(const struct Observation2D& new_ob
         LOG(WARNING) << "No robot manager specified" << std::endl;
         return -1.0f;
     }
-    int res_code = 0;
     matchLandmark(new_obs);
+    int res_code = 0;
     res_code += static_cast<int>(updateLMBelief(new_obs));
     LOG(INFO) << "res code after lm update: " << res_code;
     if (res_code != static_cast<int>(PF_RET::SUCCESS)) {

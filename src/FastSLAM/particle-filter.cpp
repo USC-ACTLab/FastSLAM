@@ -24,7 +24,6 @@ FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr,
     }
 }
 
-
 FastSLAMPF::FastSLAMPF(std::shared_ptr<RobotManager2D> rob_ptr):
     FastSLAMPF(rob_ptr, DEFAULT_NUM_PARTICLE,
                {.x = 0, .y = 0, .theta_rad = 0}, DEFAULT_IMPORTANCE_FACTOR) {
@@ -98,6 +97,7 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
                          std::queue<struct Observation2D> &a_sighting_queue) {
     for (auto& particle: m_particle_set){
         particle.second->updatePose(samplePose(a_robot_pose_mean));
+        // particle.second->updatePose(a_robot_pose_mean);
     }
 
     while (!a_sighting_queue.empty()) {
@@ -107,6 +107,7 @@ void FastSLAMPF::updateFilter(const struct Pose2D &a_robot_pose_mean,
             const int particle_idx = particle.first;
             LOG(INFO) << "Updating particle #" << particle_idx;
             // TODO: add better error handling here
+            LOG(INFO) << "Current particle weight: " << m_particle_weights[particle_idx];
             m_particle_weights[particle_idx] *= particle.second->updateParticle(
                 a_sighting_queue.front());
             LOG(INFO) << "resulting particle weight: " << m_particle_weights[particle_idx];
